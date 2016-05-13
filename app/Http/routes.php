@@ -11,6 +11,7 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/','NationPollsController@index');
+Route::get('/home','NationPollsController@index');
+Route::patch('articles/{id}','NationPollsController@update');
+

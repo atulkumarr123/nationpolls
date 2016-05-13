@@ -1,0 +1,22 @@
+.article-title-class {
+    font-weight: bold;
+    margin-bottom: 2px;
+    color: #CC5A10;
+}
+#main-content-holder {
+    margin-top: 55px;
+}
+
+#main-content-holder, #adplaceholderonside {
+    background-color: white;
+    border: 1px solid white;
+
+}
+
+@media screen and (min-width: 768px) {
+    #main-content-holder, #adplaceholderonside {
+        border-radius: 5px;
+        margin-top: 55px;
+        border: 1px solid white;
+    }
+}
