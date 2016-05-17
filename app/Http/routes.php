@@ -13,5 +13,5 @@
 
 Route::get('/','NationPollsController@index');
 Route::get('/home','NationPollsController@index');
-Route::patch('articles/{id}','NationPollsController@update');
+Route::patch('/{id}','NationPollsController@update');
 

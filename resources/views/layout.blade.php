@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-{{--    @include("commons._metaInfo")--}}
+    @include("_metaInfo")
     <title>Nation Polls</title>
     <link rel="stylesheet" href="/css/app.css">
     {{--<link rel="stylesheet" href="/css/font-awesome.css">--}}
@@ -9,6 +9,8 @@
     {{--<link rel="stylesheet" href="/css/sweetalert.css">--}}
     {{--<link rel="stylesheet" href="/css/subscription.css">--}}
     <link rel="stylesheet" href="/css/custom.css">
+    {{--<link rel="stylesheet" href="/css/bar.css">--}}
+    {{--<link rel="stylesheet" href="/css/material-charts.css">--}}
     {{--<link rel="stylesheet" href="/css/socialMediaFontsFamily.css">--}}
     {{--<link rel="stylesheet" href="/css/fromGulp/carouselModeToListArticles.css">--}}
     {{--<link rel="stylesheet" href="/css/searchBar.css">--}}
@@ -16,15 +18,12 @@
     {{--<link rel="stylesheet" href="/css/atulyaperspectives.css">--}}
     {{--<script type="text/javascript" src="/js/atulyaPerspectives.js"></script>--}}
 
-    <script type="text/javascript"
-            src="/js/jquery.min.js"></script>
-    <script
-            type="text/javascript"
-            src="/js/jquery-ui.min.js">
-    </script>
-    <script type="text/javascript"
-            src="/js/bootstrap.min.js">
-    </script>
+    <script type="text/javascript"src="/js/jquery-1.12.3.min.js"></script>
+    <script type="text/javascript" src="/js/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/js/barchart.js"></script>
+    <script type="text/javascript" src="/js/barchartsupport.js"></script>
+    <script type="text/javascript" src="/js/bar.js"></script>
     {{--<script type="text/javascript"--}}
             {{--src="/js/select2.min.js">--}}
     {{--</script>--}}

@@ -15,6 +15,7 @@ class CreatePollsTable extends Migration
         Schema::create('polls', function(Blueprint $table) {
             $table->increments('id');
             $table->string('title');
+            $table->string('status');
             $table->timestamps();
         });
     }
@@ -27,6 +28,5 @@ class CreatePollsTable extends Migration
     public function down()
     {
         Schema::drop("polls");
-
     }
 }

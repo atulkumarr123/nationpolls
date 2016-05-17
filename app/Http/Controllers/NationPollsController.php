@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Article;
 use App\ArticleDetail;
 use App\Category;
-use App\Http\Requests;
+use App\Http\Requests\NationPollRequest;
+use App\Http\Requests\Request;
 use App\Http\Requests\ArticleRequest;
 use App\Poll;
+use App\PolledData;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -26,17 +28,46 @@ class NationPollsController extends Controller
      */
     public function index()
     {
-        $poll = Poll::orderBy('updated_at','desc')->get()->first();
-//        dd($poll);
-//        dd($poll->options()->first()->option);
+        $poll = Poll::orderBy('updated_at', 'desc')->get()->first();
+        $totalPolledData = PolledData::where('poll_id', $poll->id)->get();
         $options = $poll->options()->get();
-        return view('pollToday')->with(compact('poll','options'));
-
-//        return view('miscellaneous.subscribeForm')->with('articles', $articles);
+        $polledData = collect([]);
+        if ($totalPolledData->count()!=0) {
+        foreach ($options as $option) {
+            $polledDataForOneOption = PolledData::where('option', $option->option)->get();
+            $polledData->put($option->option, ((count($polledDataForOneOption) * 100) / (count($totalPolledData))));
+        }
+        }
+        return view('pollToday')->with(compact('poll','options','polledData'));
     }
 
-    public function update(ArticleRequest $request, $id){
-        return view('pollToday');
+    public function update(NationPollRequest $request,$id)
+    {
+//        dd($request);
+        DB::beginTransaction();
+        try {
+            $polledData = PolledData::create(['option' => $request->get('option'),
+                'poll_id' => $id,]);
+            $polledData->save();
+            DB::commit();
+        }
+        catch (\Exception $e) {
+            Log::info("error....");
+            DB::rollback();
+            throw $e;
+        }
+
+        $poll = Poll::orderBy('updated_at','desc')->get()->first();
+        $totalPolledData = PolledData::where('poll_id', $poll->id)->get();
+        $options = $poll->options()->get();
+        $polledData = collect([]);
+        if ($totalPolledData->count()!=0) {
+        foreach ($options as $option) {
+            $polledDataForOneOption = PolledData::where('option', $option->option)->get();
+            $polledData->put($option->option, ((count($polledDataForOneOption)*100)/(count($totalPolledData))));
+        }
+        }
+        return view('pollToday')->with(compact('poll','options','polledData'));
 }
 
 
