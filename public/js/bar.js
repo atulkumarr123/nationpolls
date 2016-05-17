@@ -19,7 +19,7 @@ $(function () {
         xAxis: {
             type: 'category',
             labels: {
-                rotation: -45,
+                rotation: -50,
                 style: {
                     fontSize: '13px',
                     fontFamily: 'Verdana, sans-serif'
@@ -38,28 +38,26 @@ $(function () {
         tooltip: {
             pointFormat: '<b>{point.y:.1f} %</b>'
         },
-        series: [{
-            name: 'Population',
-            data: arrayPolledData,
+        plotOptions: { column: { dataLabels: { enabled: true }}},
+        series: [{name: 'Population',data: arrayPolledData,
             dataLabels: {
                 enabled: true,
-                rotation: -90,
-                color: '#FFFFFF',
-                align: 'right',
-                format: '{point.y:.1f}', // one decimal
-                y: 10, // 10 pixels down from the top
+                //rotation: -90,
+                //color: '#D8D8D8',
+                align: 'center',
+                format: '{point.y:.1f}%', // one decimal
+                //y: 10, // 10 pixels down from the top
                 style: {
-                    fontSize: '13px',
+                    fontSize: '12px',
                     fontFamily: 'Verdana, sans-serif'
                 }
             }
-        }]
-
+        }],
     });
     //var chart = $('#barChart').npcharts();
     //alert(stringPolledData);
     //chart.series[0].setData([['Yes',2],['No',5],['It was always there',23],]);
     //$('#barChart').npcharts().redraw();
-                            //[['Yes',2],['No',5],['It was always there',23],]
+    //[['Yes',2],['No',5],['It was always there',23],]
 });
 

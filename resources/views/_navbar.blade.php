@@ -28,13 +28,11 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li><a href="/articles/filter/1">Fitness</a></li>
-                <li><a href="/articles/filter/2">Fashion</a></li>
-                {{--<li><a href="/articles/filter/life">Life</a></li>--}}
-                <li><a href="/articles/filter/3">Relationships</a></li>
-                <li><a href="/articles/filter/4">Wierd Facts</a></li>
-                <li><a href="/articles/filter/5">Media Stories</a></li>
-                <li><a href="/articles/filter/6">Open Votes</a></li>
+                <li><a href="/articles/filter/1">Politics</a></li>
+                <li><a href="/articles/filter/2">Cinema</a></li>
+                <li><a href="/articles/filter/3">Media</a></li>
+                <li><a href="/articles/filter/4">Historical</a></li>
+                <li><a href="/articles/filter/5">Geographical</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 {{--<li class="dropdown">--}}

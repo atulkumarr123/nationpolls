@@ -1,0 +1,31 @@
+input.empty {
+    font-family: FontAwesome;
+    font-style: normal;
+    font-weight: normal;
+    text-decoration: inherit;
+}
+#searchButton {
+    background-color: #FFFFFF;
+padding: 6px 12px;
+font-size: 14px;
+border: 1px solid #ccc;
+border-radius: 4px;
+    color: #a01b07;
+}
+
+/*@media only screen and (max-width: 375px){*/
+    /*#searchButton{*/
+        /*transform: scale(1.15,1);*/
+        /*-ms-transform: scale(1.15,1);*/
+        /*-webkit-transform: scale(1.15,1);*/
+        /*-o-transform: scale(1.15,1);*/
+        /*-moz-transform: scale(1.15,1);*/
+    /*}}*/
+/*@media only screen and (max-width: 375px){*/
+    /*#iconified{*/
+        /*transform: scale(0.7,1);*/
+        /*-ms-transform: scale(0.7,1);*/
+        /*-webkit-transform: scale(0.7,1);*/
+        /*-o-transform: scale(0.7,1);*/
+        /*-moz-transform: scale(0.7,1);*/
+    /*}}*/

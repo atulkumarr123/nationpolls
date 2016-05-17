@@ -4,9 +4,8 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
-use App\Poll;
+use App\Helpers\KernelHelper;
+
 
 
 class Kernel extends ConsoleKernel
@@ -28,19 +27,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')
-        //          ->hourly();
-//        Log::info('This is some useful information.');
-//        $polls = Poll::get();
-//        $polls = Poll::where('status', 'opened')->
-//        orderBy('created_at', 'desc')->get();
-//        Log::info($polls);
-
         $schedule->call(function () {
-        $polls = Poll::where('status', 'opened')->
-        orderBy('created_at', 'desc')->get();
-
-            Log::info("Yes crons are working");
+            KernelHelper::findAndCloseThePolls();
         });
     }
 }
