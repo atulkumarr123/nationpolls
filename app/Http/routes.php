@@ -13,8 +13,14 @@
 
 Route::get('/','NationPollsController@index');
 Route::get('/home','NationPollsController@index');
-Route::get('/{id}','NationPollsController@index');
-Route::patch('/{id}','NationPollsController@update');
+Route::get('polls/onlyatulcancreate', 'NationPollsController@create');
+Route::get('polls/{id}','NationPollsController@show');
+Route::post('polls','NationPollsController@store');
+Route::patch('/{id}','NationPollsController@updatePolledData');
 Route::get('/filter/{category}', 'NationPollsController@filterPollsBasedOnCategory');
+
+
+
+
 
 

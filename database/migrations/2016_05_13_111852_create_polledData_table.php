@@ -16,6 +16,7 @@ class CreatePolledDataTable extends Migration
             $table->increments('id');
             $table->integer('poll_id')->unsigned();
             $table->string('option');
+            $table->string('voter_machine_ip');
             $table->timestamps();
         });
 

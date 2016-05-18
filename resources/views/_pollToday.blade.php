@@ -3,7 +3,7 @@
 <script type="text/javascript" src="/js/bar.js"></script>
 <div class="col-md-12" id="main-content-holder">
 {{--        @include("ads._ad1")--}}
-        {!! Form::open(['method'=>'patch','files' => true,'action'=>['NationPollsController@update',$poll->id],
+        {!! Form::open(['method'=>'patch','files' => true,'action'=>['NationPollsController@updatePolledData',$poll->id],
        'enctype'=>'multipart/form-data"',
        'files' => true])!!}
         <div class="row">
@@ -24,7 +24,7 @@
                     @endforeach
                 </div>
                 <div class="form-group">
-                    <button type="submit" class="btn btn-primary" style="align:center">Save</button>
+                    <button type="submit" class="btn btn-primary"  style="align:center;">Save</button>
                 </div>
                 <br>
                 <div class="form-group">

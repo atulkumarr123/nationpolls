@@ -14,4 +14,8 @@ class Poll extends Model
     public function polledData(){
         return $this->hasMany('App\PolledData');
     }
+
+    public function Category(){
+        return $this->belongsTo('App\Category');
+    }
 }

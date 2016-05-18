@@ -16,4 +16,12 @@ class ControllerHelper{
         return $underScored;
     }
 
+    public static function  processCoverImage($request){
+            $underScoredImageName = ControllerHelper::underScoreIt($request->get('title') . '.' .$request->file('image')->getClientOriginalExtension());
+            $underScoredTitle = ControllerHelper::underScoreIt($request->get('title'));
+            $request->file('image')->move(
+                base_path().'/public/images/'.$underScoredTitle, $underScoredImageName);
+        return $underScoredImageName;
+    }
+
 }

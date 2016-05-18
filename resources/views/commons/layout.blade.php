@@ -5,7 +5,7 @@
     <title>Nation Polls</title>
     <link rel="stylesheet" href="/css/app.css">
     <link rel="stylesheet" href="/css/font-awesome.css">
-    {{--<link rel="stylesheet" href="/css/select2.min.css">--}}
+    <link rel="stylesheet" href="/css/select2.min.css">
     {{--<link rel="stylesheet" href="/css/sweetalert.css">--}}
     {{--<link rel="stylesheet" href="/css/subscription.css">--}}
     <link rel="stylesheet" href="/css/custom.css">
@@ -25,9 +25,7 @@
     <script type="text/javascript" src="/js/jquery.timer.js"></script>
     <script type="text/javascript" src="/js/timer.js"></script>
     <script type="text/javascript" src="/js/moment.js"></script>
-    {{--<script type="text/javascript"--}}
-            {{--src="/js/select2.min.js">--}}
-    {{--</script>--}}
+    <script type="text/javascript" src="/js/select2.min.js"></script>
     {{--<script--}}
             {{--type="text/javascript"--}}
             {{--src="/js/sweetalert.min.js">--}}
@@ -50,11 +48,11 @@
 @include('_navbar')
 <div class="container">
     <div class="row" id="mainRow">
-{{--        @include('flash::message')--}}
+        @include('flash::message')
         @yield('pollToday')
         {{--@yield('article')--}}
         @yield('recentUpdates')
-        {{--@yield('similar')--}}
+        @yield('createPollForm')
         {{--@yield('aboutUs')--}}
         {{--@yield('registerUser')--}}
         {{--@yield('login')--}}

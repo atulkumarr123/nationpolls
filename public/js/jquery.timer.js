@@ -67,6 +67,7 @@
             afterDeadline: function(timerBlock){
                 $(".option").attr("disabled", true);
                 $(".timer-head-block").attr("hidden", true);
+                $(".btn").hide();
                 timerBlock.bodyBlock.html('<p style="font-size: 1.2em;">Polling is closed!</p>');
             }
         };
