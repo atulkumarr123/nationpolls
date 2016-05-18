@@ -28,11 +28,11 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li><a href="/articles/filter/1">Politics</a></li>
-                <li><a href="/articles/filter/2">Cinema</a></li>
-                <li><a href="/articles/filter/3">Media</a></li>
-                <li><a href="/articles/filter/4">Historical</a></li>
-                <li><a href="/articles/filter/5">Geographical</a></li>
+                <li><a href="/filter/1">Politics</a></li>
+                <li><a href="/filter/2">Cinema</a></li>
+                <li><a href="/filter/3">Media</a></li>
+                <li><a href="/filter/4">History</a></li>
+                <li><a href="/filter/5">Geography</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 {{--<li class="dropdown">--}}

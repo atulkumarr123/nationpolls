@@ -13,5 +13,8 @@
 
 Route::get('/','NationPollsController@index');
 Route::get('/home','NationPollsController@index');
+Route::get('/{id}','NationPollsController@index');
 Route::patch('/{id}','NationPollsController@update');
+Route::get('/filter/{category}', 'NationPollsController@filterPollsBasedOnCategory');
+
 

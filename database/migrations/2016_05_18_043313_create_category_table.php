@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePollsTable extends Migration
+class CreateCategoryTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,13 +12,10 @@ class CreatePollsTable extends Migration
      */
     public function up()
     {
-        Schema::create('polls', function(Blueprint $table) {
+        Schema::create('categories', function(Blueprint $table) {
             $table->increments('id');
-            $table->string('title');
-            $table->string('status');
-            $table->integer('poll_duration');
-            $table->integer('category');
-            $table->string('img_name');
+            $table->string('name');
+            $table->string('label');
             $table->timestamps();
         });
     }
@@ -30,6 +27,6 @@ class CreatePollsTable extends Migration
      */
     public function down()
     {
-        Schema::drop("polls");
+        Schema::drop("categories");
     }
 }

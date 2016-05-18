@@ -70,5 +70,11 @@ class NationPollsController extends Controller
         return view('pollToday')->with(compact('poll','options','polledData'));
 }
 
+    public function filterPollsBasedOnCategory($category)
+    {
+        $pollsOfOneCategory = Poll::where('category', $category)->orderBy('updated_at', 'desc')->get();
+        return view('home')->with(compact('pollsOfOneCategory'));
+    }
+
 
 }

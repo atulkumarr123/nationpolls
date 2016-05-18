@@ -21,9 +21,7 @@
     <script type="text/javascript"src="/js/jquery-1.12.3.min.js"></script>
     <script type="text/javascript" src="/js/jquery-ui.min.js"></script>
     <script type="text/javascript" src="/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="/js/barchart.js"></script>
-    <script type="text/javascript" src="/js/barchartsupport.js"></script>
-    <script type="text/javascript" src="/js/bar.js"></script>
+
     <script type="text/javascript" src="/js/jquery.timer.js"></script>
     <script type="text/javascript" src="/js/timer.js"></script>
     <script type="text/javascript" src="/js/moment.js"></script>
@@ -55,7 +53,7 @@
 {{--        @include('flash::message')--}}
         @yield('pollToday')
         {{--@yield('article')--}}
-        {{--@yield('recentUpdates')--}}
+        @yield('recentUpdates')
         {{--@yield('similar')--}}
         {{--@yield('aboutUs')--}}
         {{--@yield('registerUser')--}}

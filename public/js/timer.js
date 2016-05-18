@@ -1,5 +1,5 @@
 $(document).ready(function(){
-    var createdAt = moment($('#createdAt').val()).add('days', 7);
+    var createdAt = moment($('#createdAt').val()).add('days', $('#pollDuration').val());
     $('#simple_timer').syotimer({
         year: createdAt.year(),
         month: createdAt.month()+1,// getMonth returns the value in the range of 0-11
