@@ -64,5 +64,12 @@
 </div>
 {{--@include('commons._footer')--}}
 </body>
-{{--@yield('addDivScript')--}}
+<script>
+    $('#flash-overlay-modal').modal();
+//    $(document).ready(function(){
+//        $(".myBtn").click(function(){
+//            $("#myModal").modal({backdrop:'static',keyboard:false});
+//        });
+//    });
+</script>
 </html>

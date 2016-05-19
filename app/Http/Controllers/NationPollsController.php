@@ -6,6 +6,7 @@ use App\Article;
 use App\ArticleDetail;
 use App\Category;
 use App\Http\Requests\NationPollRequest;
+use App\Http\Requests\PolledDataRequest;
 use App\Http\Requests\Request;
 use App\Http\Requests\ArticleRequest;
 use App\Option;
@@ -39,7 +40,7 @@ class NationPollsController extends Controller
         return $this->runningPoll($id);
     }
 
-    public function updatePolledData(NationPollRequest $request,$id)
+    public function updatePolledData(PolledDataRequest $request,$id)
     {
         DB::beginTransaction();
         try {
@@ -47,7 +48,7 @@ class NationPollsController extends Controller
             $polledData = PolledData::where('voter_machine_ip', $request->ip())
                 ->where('poll_id',$id)->get()->first();
             if ($polledData != null) {
-                Flash::warning('oops! It seems you have already cast your vote');
+                Flash::warning('oops! looks like you have already cast your vote');
                 return $this->runningPoll($id);
             }
                 $polledData = PolledData::create(['option' => $request->get('option'),
@@ -74,7 +75,7 @@ class NationPollsController extends Controller
     public function runningPoll($id){
         $poll = Poll::find($id);
         $totalPolledData = PolledData::where('poll_id', $poll->id)->get();
-        $options = $poll->options()->get();
+        $options = $poll->options()->get(   );
         $polledData = collect([]);
         if ($totalPolledData->count()!=0) {
             foreach ($options as $option) {
@@ -100,13 +101,13 @@ class NationPollsController extends Controller
         DB::beginTransaction();
         try {
             $imageName = ControllerHelper::processCoverImage($request);
+
             $poll = Poll::create(['title' => $request->get('title'),
-                'category_id' => $request->get('category')+1,
+                'category' => $request->get('category')+1, //since index of category drop down starts from 0
                 'img_name' => $imageName,
                 'poll_duration' => $request->get('pollDuration')
             ]);
             $poll->save();
-
             $optionsFromRequest = $request->input('options');
             for ($counter = 0; $counter < count($optionsFromRequest); $counter++) {
                 Log::info("begin....");
@@ -121,6 +122,6 @@ class NationPollsController extends Controller
             DB::rollback();
             throw $e;
         }
-        return redirect('/home');
+        return redirect('/');
     }
 }

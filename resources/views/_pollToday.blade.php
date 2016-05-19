@@ -6,8 +6,8 @@
         {!! Form::open(['method'=>'patch','files' => true,'action'=>['NationPollsController@updatePolledData',$poll->id],
        'enctype'=>'multipart/form-data"',
        'files' => true])!!}
-        <div class="row">
-{{--            @include("commons._errors")--}}
+    <div class="row">
+            @include("commons._errors")
             <div class="col-md-2"></div>
             <div class="col-md-8" id="outerDiv">
                 <input type="hidden" name="polledData" id="polledData" value="{{$polledData}}"/>
@@ -35,4 +35,5 @@
             <div class="col-md-2"></div>
         </div>
         {!! Form::close() !!}
+        {{--</form>--}}
     </div>

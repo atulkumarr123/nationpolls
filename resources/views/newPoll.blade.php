@@ -10,14 +10,14 @@
                     {{csrf_field()}}
                     <div class="form-group">
                         <label for="title">Title:</label>
-                        <input type="text" name="title" id="title" class="form-control" value="" required>
+                        <input type="text" name="title" id="title" class="form-control" value="{{ old('title') }}" required>
                     </div>
                 @include("tagging._optionsContainer")
                 <div class="row">
                     <div class="col-md-6">
                 <div class="form-group">
                     <label for="pollDuration">Poll Duration:</label>
-                    <input type="text" name="pollDuration" id="pollDuration" class="form-control" value="" required>
+                    <input type="text" name="pollDuration" id="pollDuration" class="form-control" value="{{ old('pollDuration') }}" required>
                     </div>
                         </div>
                         <div class="col-md-6">

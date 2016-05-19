@@ -15,13 +15,25 @@
         <div class="col-md-6">
 <div class="form-group">
     {!! Form::label('options', 'Options:') !!}
-    {!! Form::select('options[]', $options, $selectedOptions,['id'=>'options','class'=>'form-control', 'multiple', 'required']) !!}
+    <h6  hidden id="validateOptions" style="color: red"> add atleast 2 items</h6>
+    {!! Form::select('options[]', $options, $selectedOptions,['value'=>'{{old(options)}}', 'id'=>'options','class'=>'form-control', 'multiple', 'required']) !!}
 </div>
 <script type="text/javascript">
     $('#options').select2({
-            placeholder: 'Add some options',
-            tags:true
+            placeholder: 'Add atleast 2 options',
+            tags:true,
+            minimumInputLength: 1,
             });
+    $('form').on('submit', function(){
+        var minimum = 2;
+        if($("#options").select2('data').length>=minimum){
+            return true;
+        }else {
+           $('#validateOptions').show();
+            return false;
+        }
+    })
 </script>
+
 </div>
 </div>

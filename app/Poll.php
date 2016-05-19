@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Poll extends Model
 {
-    protected $fillable = ['title','status','poll_duration','category'];
+    protected $fillable = ['title','status','poll_duration','category','img_name'];
 
     public function options(){
         return $this->hasMany('App\Option');

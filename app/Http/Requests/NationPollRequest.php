@@ -23,8 +23,22 @@ class NationPollRequest extends Request
      */
     public function rules()
     {
+
         return [
-//            'email' => 'required|email|unique:subscribers'
+            'title' => 'required|min:7',
+            'category'=>'required',
+            'options'=>'required',
+            'pollDuration' => 'required|integer|min:0',
+            'image'=>'required',
+        ];
+    }
+    public function messages()
+    {
+        return [
+            'title.required' => 'Title is required',
+            'category.required' => 'Category is required',
+            'options.required' => 'Options are required e.g, YES, NO, MAY BE',
+            'pollDuration.required' => 'Poll Duration is required (i.e, number of days like 8, 50)',
         ];
     }
 }
