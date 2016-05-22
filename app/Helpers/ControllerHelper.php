@@ -2,7 +2,9 @@
 
 namespace App\Helpers;
 
-
+use App\GeoLocs;
+use App\Option;
+use App\CountriesPollsApplicableOn;
 
 class ControllerHelper{
 
@@ -22,6 +24,28 @@ class ControllerHelper{
             $request->file('image')->move(
                 base_path().'/public/images/'.$underScoredTitle, $underScoredImageName);
         return $underScoredImageName;
+    }
+
+    public static function  saveOptions($poll,$request){
+        $optionsFromRequest = $request->input('options');
+        for ($counter = 0; $counter < count($optionsFromRequest); $counter++) {
+            $option = Option::create(['option' => $optionsFromRequest[$counter],'poll_id'=>$poll->id]);
+            $option->save();
+        }
+    }
+
+    public static function  handleAndSaveGeoLocs($poll,$request){
+        $geoLoc = GeoLocs::find($poll->geo_locs_id);
+        if($geoLoc->name=='Country'){
+            $countries = $request->get('countries');
+            for ($counter = 0; $counter < count($countries); $counter++) {
+                if($countries[$counter]!=''){
+                $countriesPollsApplicableOn = CountriesPollsApplicableOn::create(['poll_id' => $poll->id,
+                    'country_id' => $countries[$counter]]);
+                $countriesPollsApplicableOn->save();
+                }
+            }
+        }
     }
 
 }

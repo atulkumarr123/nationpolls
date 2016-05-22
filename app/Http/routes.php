@@ -16,8 +16,11 @@ Route::get('/home','NationPollsController@index');
 Route::get('polls/onlyatulcancreate', 'NationPollsController@create');
 Route::get('polls/{id}','NationPollsController@show');
 Route::post('polls','NationPollsController@store');
+Route::get('search', 'PollsControllerForCustomOperations@search');
 Route::patch('/{id}','NationPollsController@updatePolledData');
-Route::get('/filter/{category}', 'NationPollsController@filterPollsBasedOnCategory');
+Route::get('/filter/{category}', 'PollsControllerForCustomOperations@filterPollsBasedOnCategory');
+Route::get('/countries', 'NationPollsController@countries');
+
 
 
 

@@ -1,3 +1,26 @@
+.copyright a{
+    color: #AEB5C5;
+}
+.footer .copyright {
+    color: #AEB5C5;
+    margin: 0 0 4px;
+    font-size: 15px;
+    align:left;
+}
+.footer {
+    padding: 10px 0;
+    background-color: #222;
+
+}
+.separator {
+    content: '';
+    display: inline-block;
+    background: #888;
+    margin: 0px 4px;
+    height: 18px;
+    width: 1px;
+    vertical-align: sub;
+}
 @media only screen and (min-width: 992px) {
         .media-object {
             display: block;

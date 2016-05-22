@@ -148,7 +148,7 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
         Laracasts\Flash\FlashServiceProvider::class,
-
+        Torann\GeoIP\GeoIPServiceProvider::class,
         /*
          * Application Service Providers...
          */
@@ -207,6 +207,7 @@ return [
         'Html' => Collective\Html\HtmlFacade::class,
         'Helper'    => App\Helpers\ControllerHelper::class,
         'Flash'     => Laracasts\Flash\Flash::class,
+        'GeoIP' => Torann\GeoIP\GeoIPFacade::class,
     ],
 
 ];

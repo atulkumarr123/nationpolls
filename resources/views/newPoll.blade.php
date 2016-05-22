@@ -12,7 +12,8 @@
                         <label for="title">Title:</label>
                         <input type="text" name="title" id="title" class="form-control" value="{{ old('title') }}" required>
                     </div>
-                @include("tagging._optionsContainer")
+                @include("lovs._optionsContainer")
+                @include("lovs._geoLocsContainer")
                 <div class="row">
                     <div class="col-md-6">
                 <div class="form-group">
@@ -35,18 +36,10 @@
 
         </form>
     </div>
-
+    <script type="text/javascript"
+            src="/js/forCreateAndEditPageOnly.js"></script>
 @stop
 
-{{--@section('addDivScript')--}}
-
-    {{--</script>--}}
-    {{--@include("public.js.customJs.createNewEditorScript")--}}
-{{--    {{ script('public.js.customJs.createNewEditorScript') }}--}}
-    {{--<script type="text/javascript" src="{!! asset('public/js/customJs/createNewEditorScript') !!}"></script>--}}
-    {{--<script type="text/javascript"--}}
-            {{--src="/js/customJs/socialIcons.js"></script>--}}
-{{--@stop--}}
 
 
 

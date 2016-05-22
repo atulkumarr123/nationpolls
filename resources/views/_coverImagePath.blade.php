@@ -1,1 +1,0 @@
-/images/{{Helper::underScoreIt($poll->title).'/'.$poll->img_name}}

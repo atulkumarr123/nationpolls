@@ -43,7 +43,7 @@
                         <div class="" style="padding-top:7px;padding-bottom:7px">
                             <div class="col-md-12" style="padding-right:0px">
                                 <div style=" display: flex;">
-                                    <input type="text" class="form-control empty" name = "search" id="search"  onfocus="this.placeholder = ''" onblur="this.placeholder = '&#xF002;  Search...'"  placeholder="&#xF002; Search..." required/>
+                                    <input type="text" class="form-control empty" name = "search" id="search"  value="@if(!empty($search)){{$search}}@endif" onfocus="this.placeholder = ''" onblur="this.placeholder = '&#xF002;  Search...'"  placeholder="&#xF002; Search..." required/>
                                     <button type="submit" id="searchButton" class="fa fa-search"></button>
                                 </div>
                             </div>

@@ -8,7 +8,7 @@
                         <article class="media">
                             <h4 class="article-title-class">{{$poll->title}}</h4>
                             <h6 class="pull-right" style="margin:0px">{{Carbon\Carbon::parse($poll->updated_at)->toFormattedDateString()}}</h6>
-                            <img class="media-object" src="@include("_coverImagePath")">
+                            <img class="media-object" src="@include("commons._coverImagePath")">
                             </p>
                         </article>
                     </a>
