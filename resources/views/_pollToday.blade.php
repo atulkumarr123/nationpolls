@@ -8,7 +8,7 @@
 <script type="text/javascript" src="/js/bar.js"></script>
 <div class="col-md-12" id="main-content-holder">
 {{--        @include("ads._ad1")--}}
-        {!! Form::open(['method'=>'patch','files' => true,'action'=>['NationPollsController@updatePolledData',$poll->id],
+        {!! Form::open(['method'=>'patch','files' => true, 'id'=>'updateThePollData','action'=>['NationPollsController@updatePolledData',$poll->id],
        'enctype'=>'multipart/form-data"',
        'files' => true])!!}
     <div class="row">
@@ -16,11 +16,13 @@
             <div class="col-md-2"></div>
             <div class="col-md-8" id="outerDiv">
                 <input type="hidden" name="polledData" id="polledData" value="{{$polledData}}"/>
-                <input type="hidden" name="createdAt" id="createdAt" value="{{$poll->created_at}}"/>
+                <input type="hidden" name="cresatedAt" id="createdAt" value="{{$poll->created_at}}"/>
                 <input type="hidden" name="pollDuration" id="pollDuration" value="{{$poll->poll_duration}}"/>
-                @if(session()->has('locationMismatchData'))
-                <input type="hidden" name="locationMismatchData" id="locationMismatchData" value="{{session('locationMismatchData')}}"/>
-                    @endif
+                <input type="hidden" name="resolvedClientLocation" id="resolvedClientLocation"/>
+            @if(session()->has('locationMismatchData'))
+                <input type="text" name="locationMismatchData" id="locationMismatchData" value="{{session('locationMismatchData')}}"/>
+                    {{session()->forget('locationMismatchData')}}
+                @endif
                 {{csrf_field()}}
                 <div class="form-group" id="simple_timer"></div>
                     <div class="form-group">
@@ -30,7 +32,6 @@
                                <label for="{{$option->option}}">{{$option->option}}</label>
                 <br>
                     @endforeach
-                        {{session()->forget('locationMismatchData')}}
                 </div>
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary"  style="align:center;">Save</button>

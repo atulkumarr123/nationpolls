@@ -66,45 +66,9 @@ class NationPollsController extends Controller
                 Flash::warning('oops! looks like you have already cast your vote');
                 return $this->runningPoll($id);
             }
-
-
-            $clientLocation = GeoIP::getLocation($clientMachineIP);
-            $clientCountryIsoCode = $clientLocation['isoCode'];
-            $poll = Poll::find($id);
-            $geoLoc = GeoLocs::find($poll->geo_locs_id);
-            $countriesPollsApplicableOn = emptyArray();
-            if($geoLoc->name=='Country'){
-                $countriesPollsApplicableOn = CountriesPollsApplicableOn::where('poll_id', $id)->get()->toArray();
-            }
-            for ($counter = 0; $counter < count($countriesPollsApplicableOn); $counter++) {
-                $singleCountryPollDatum = $countriesPollsApplicableOn[$counter];
-                $country = Country::find($singleCountryPollDatum['country_id']);
-                if($clientCountryIsoCode==$country->country_iso_code){
-                    $polledData = PolledData::create(['option' => $request->get('option'),
-                        'poll_id' => $id,
-                        'voter_machine_ip' => $request->ip(),]);
-                    $polledData->save();                }
-                else{
-                    $countrieNamesPollsApplicableOn = new Collection();
-                    for ($counter = 0; $counter < count($countriesPollsApplicableOn); $counter++) {
-                        $singleCountryPollDatum = $countriesPollsApplicableOn[$counter];
-                        $countrieNamesPollsApplicableOn->push(Country::find($singleCountryPollDatum['country_id'])->name);
-                    }
-                    $locationMismatchData = collect([
-                        ['optionToBeSelected' => $request->get('option')],
-                        ['locationMismatch' => 'unMatched'],
-                        ['countriesPollsApplicableOn' => $countrieNamesPollsApplicableOn],
-                    ]);
-                    $request->session()->put('locationMismatchData', $locationMismatchData);
-                    return  redirect()->back();
-                }
-            }
-
-
-
-
+            $this->validateTheLocationAndUpdatePolledData($request,$id);
             DB::commit();
-            Flash::success('Thanks for casting your vote');
+
         }
         catch (\Exception $e) {
             Log::info("error....");
@@ -113,9 +77,55 @@ class NationPollsController extends Controller
         }
             return $this->runningPoll($id);
 }
+    public function validateTheLocationAndUpdatePolledData($request,$id){
+        $clientMachineIP = $request->ip();
+        $clientLocation = GeoIP::getLocation($clientMachineIP);
+        if($request->get('resolvedClientLocation')!=null){
+            $clientCountryIsoCode = $request->get('resolvedClientLocation');
+        }
+        else{
+        $clientCountryIsoCode = $clientLocation['isoCode'];
+        }
+        $poll = Poll::find($id);
+        $geoLoc = GeoLocs::find($poll->geo_locs_id);
+        $countriesPollsApplicableOn = emptyArray();
+        $unMatched = true;
+        if($geoLoc->name=='Country'){
+            $countriesPollsApplicableOn = CountriesPollsApplicableOn::where('poll_id', $id)->get()->toArray();
+        }
+        for ($counter = 0; $counter < count($countriesPollsApplicableOn); $counter++) {
+            $singleCountryPollDatum = $countriesPollsApplicableOn[$counter];
+            $country = Country::find($singleCountryPollDatum['country_id']);
+            if($clientCountryIsoCode==$country->country_iso_code){
+                $polledData = PolledData::create(['option' => $request->get('option'),
+                    'poll_id' => $id,
+                    'voter_machine_ip' => $request->ip(),]);
+                $polledData->save();
+                $unMatched = false;
+                Flash::success('Thanks for casting your vote');}
+        }
+        if($unMatched){
+            $this->pepareAndReturnTheMsgToHandleMismatchedLocation($request,$countriesPollsApplicableOn);}
 
+    }
+    public function pepareAndReturnTheMsgToHandleMismatchedLocation($request,$countriesPollsApplicableOn){
+        $countrieNamesPollsApplicableOn = new Collection();
+        $countryISOCodesPollsApplicableOn = new Collection();
+        for ($counter = 0; $counter < count($countriesPollsApplicableOn); $counter++) {
+            $singleCountryPollDatum = $countriesPollsApplicableOn[$counter];
+            $countrieNamesPollsApplicableOn->push(Country::find($singleCountryPollDatum['country_id'])->name);
+            $countryISOCodesPollsApplicableOn->push(Country::find($singleCountryPollDatum['country_id'])->country_iso_code);
 
-
+        }
+        $locationMismatchData = collect([
+            ['optionToBeSelected' => $request->get('option')],
+            ['locationMismatch' => 'unMatched'],
+            ['countriesPollsApplicableOn' => $countrieNamesPollsApplicableOn],
+            ['countryISOCodesPollsApplicableOn' => $countryISOCodesPollsApplicableOn],
+        ]);
+        $request->session()->put('locationMismatchData', $locationMismatchData);
+        return  redirect()->back();
+    }
     public function runningPoll($id){
         $poll = Poll::find($id);
         $totalPolledData = PolledData::where('poll_id', $poll->id)->get();
@@ -127,9 +137,9 @@ class NationPollsController extends Controller
                 $polledData->put($option->option, ((count($polledDataForOneOption)*100)/(count($totalPolledData))));
             }
         }
+
         return view('pollToday')->with(compact('poll','options','polledData'));
     }
-
     public function create()
     {
         $categories = [''=>'']+Category::lists('label','id')->all();
