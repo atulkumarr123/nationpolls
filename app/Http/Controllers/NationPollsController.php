@@ -189,11 +189,10 @@ class NationPollsController extends Controller
                 while (($line = fgets($handle)) !== false) {
                     $countryCode = trim(substr($line, 0,2));
                     $countryName = trim(substr($line,10));
-//                dd($countryName);
                     $continent = Country::create([
                         'country_iso_code' => $countryCode,
                         'name' => $countryName,
-                        'parent_region_id' => 5]);
+                        'parent_region_id' => 10]);
                     $continent->save();
 //                    DB::commit();
                 }
