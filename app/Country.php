@@ -13,8 +13,12 @@ class Country extends Model
         return $this->belongsTo('App\Continent');
     }
 
-    public function countriesPollsApplicableOn()
-    {
-        return $this->hasMany('App\CountriesPollsApplicableOn');
+//    public function countriesPollsApplicableOn()
+//    {
+//        return $this->hasMany('App\CountriesPollsApplicableOn');
+//    }
+
+    public function polls(){
+        return $this->belongsToMany('App\Poll','countries_polls_applicable_on');
     }
 }

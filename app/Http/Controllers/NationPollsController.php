@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Article;
 use App\CountriesPollsApplicableOn;
-use App\City;
+use App\User;
 use App\GeoLocs;
 use App\Http\Requests\Request;
 use GeoIP;
@@ -44,8 +44,17 @@ class NationPollsController extends Controller
     public function index()
     {
         Session::forget('locationMismatchData');
-        // Temporarily increase memory limit to 256MB
+        if(Auth::check()&&Auth::user()->roles()->lists('role')->contains('admin')){
         $polls = Poll::orderBy('updated_at','desc')->get();
+        }
+        else if(Auth::check()&&!(Auth::user()->roles()->lists('role')->contains('admin'))){
+            $pollsPublishedByAdminAndDoesntBelongToCurrentUser = Poll::where('isPublishedByAdmin', 1)->
+            where('user_id', '!=',Auth::user()->id)->orderBy('updated_at', 'desc')->get();
+            $polls = Auth::user()->polls()->get();
+            $polls = $polls->merge($pollsPublishedByAdminAndDoesntBelongToCurrentUser);
+        }
+        else
+            $polls = Poll::where('isPublishedByAdmin', 1)->orderBy('updated_at', 'desc')->get();
 //        $this->dumpDataInDB();
         return view('home')->with('polls', $polls);
     }
@@ -54,6 +63,55 @@ class NationPollsController extends Controller
     {
         return $this->runningPoll($id);
     }
+
+    public function edit($id)
+    {
+        $poll = Poll::findorFail($id);
+        $title = $poll->title;
+        $options = Option::lists('option','id');
+        $selectedOptions = $poll->options()->lists('id')->toArray();
+        $geolocs = [''=>'']+GeoLocs::lists('name','id')->all();
+        $selectedGeoLocs = $poll->geo_locs_id;
+        $categories = [''=>'']+Category::lists('name','id')->all();
+        $selectedCategory = $poll->category;
+        $countries = Country::lists('name','id');
+        $selectedCountries = $poll->countries()->lists('id')->toArray();
+        return view('editContent.editPoll')->
+        with(compact('title',
+            'selectedOptions','options','poll','categories','selectedCategory',
+            'geolocs','selectedGeoLocs','countries','selectedCountries'));
+    }
+
+    public function update(NationPollRequest $request, $id)
+    {
+        DB::beginTransaction();
+        try {
+            $imageName = ControllerHelper::processCoverImage($request);
+            $poll = Poll::findorFail($id);
+            $poll->title = $request->get('title');
+            $poll->isPublishedByAdmin = ($request->get('isPublishedByAdmin') =='on' ? 1 : 0);
+            $poll->isPublished = ($request->get('isPublished') =='on' ? 1 : 0);
+            $poll->img_name = $imageName;
+            $poll->category = $request->get('category');
+            $poll->geo_locs_id = $request->get('geoloc');
+            $poll->poll_duration = $request->get('pollDuration');
+            ControllerHelper::handleAndSynchGeoLocs($poll,$request);
+            ControllerHelper::updateOptions($poll,$request);
+            $poll->update();
+            DB::commit();
+            if((!(Auth::check()&&Auth::user()->roles()->lists('role')->contains('admin'))
+                &&($request->get('isPublished')=='on'))) {
+                Flash::overlay('Your Poll has been sent to Verification Department, It will be live sooner');
+            }
+        } catch (\Exception $e) {
+            Log::info("error....");
+            DB::rollback();
+            throw $e;
+        }
+        return redirect('/home');
+    }
+
+
 
     public function updatePolledData(PolledDataRequest $request,$id)
     {
@@ -137,8 +195,8 @@ class NationPollsController extends Controller
                 $polledData->put($option->option, ((count($polledDataForOneOption)*100)/(count($totalPolledData))));
             }
         }
-
-        return view('pollToday')->with(compact('poll','options','polledData'));
+        $userOfThisPoll = User::where('id', $poll->user_id)->get()->first();
+        return view('pollToday')->with(compact('poll','options','polledData','userOfThisPoll'));
     }
     public function create()
     {
@@ -164,13 +222,17 @@ class NationPollsController extends Controller
                 'category' => $request->get('category'),
                 'geo_locs_id' => $request->get('geoloc'),
                 'img_name' => $imageName,
-                'poll_duration' => $request->get('pollDuration')
+                'poll_duration' => $request->get('pollDuration'),
+                'user_id' => Auth::user()->id
             ]);
             $poll->save();
             ControllerHelper::handleAndSaveGeoLocs($poll,$request);
             ControllerHelper::saveOptions($poll,$request);
             DB::commit();
-                Flash::overlay('congratulations! your poll is live');
+            if((!(Auth::check()&&Auth::user()->roles()->lists('role')->contains('admin'))
+                &&($request->get('isPublished')=='on'))) {
+                Flash::overlay('congratulations! your Poll has been sent to Verification Department, It will be live sooner');
+            }
         } catch (\Exception $e) {
             Log::info("error....");
             DB::rollback();

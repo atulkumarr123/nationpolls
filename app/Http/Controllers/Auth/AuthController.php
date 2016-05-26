@@ -1,9 +1,12 @@
 <?php
 
 namespace App\Http\Controllers\Auth;
-
+use Illuminate\Support\Facades\Log;
 use App\User;
+use Auth;
+use Laracasts\Flash\Flash;
 use Validator;
+use Socialite;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
@@ -67,6 +70,58 @@ class AuthController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
+        ]);
+    }
+
+    /**
+     * Redirect the user to the Facebook authentication page.
+     *
+     * @return Response
+     */
+    public function redirectToProvider($provider)
+    {
+        return Socialite::driver($provider)->redirect();
+    }
+
+    /**
+     * Obtain the user information from Facebook.
+     *
+     * @return Response
+     */
+    public function handleProviderCallback($provider)
+    {
+        try {
+            $userFromSocialMedia = Socialite::driver($provider)->user();
+        } catch (Exception $e) {
+            return redirect('auth/'.$provider);
+        }
+
+        $authUser = $this->findOrCreateUser($userFromSocialMedia);
+
+        Auth::login($authUser, true);
+        Flash::success('You are logged in');
+        return redirect()->intended($this->redirectPath());
+    }
+
+    /**
+     * Return user if exists; create and return if doesn't
+     *
+     * @param $facebookUser
+     * @return User
+     */
+    private function findOrCreateUser($userFromSocialMedia)
+    {
+        Log::info('findOrCreateUser');
+        $authUser = User::where('social_id', $userFromSocialMedia->id)->first();
+        if ($authUser){
+            return $authUser;
+        }
+
+        return User::create([
+            'name' => $userFromSocialMedia->name,
+            'email' => $userFromSocialMedia->email,
+            'social_id' => $userFromSocialMedia->id,
+            'avatar' => $userFromSocialMedia->avatar
         ]);
     }
 }

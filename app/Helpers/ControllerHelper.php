@@ -2,6 +2,7 @@
 
 namespace App\Helpers;
 
+use App\Country;
 use App\GeoLocs;
 use App\Option;
 use App\CountriesPollsApplicableOn;
@@ -48,4 +49,33 @@ class ControllerHelper{
         }
     }
 
+
+    public static function  handleAndSynchGeoLocs($poll,$request){
+        $geoLoc = GeoLocs::find($poll->geo_locs_id);
+        if($geoLoc->name=='Country'){
+            $countries = $request->get('countries');
+            for ($counter = 0; $counter < count($countries); $counter++) {
+                if (!Country::lists('id')->contains($countries[$counter])) {
+                    $country = Country::create(['name' => $countries[$counter]]);
+                    $country->save();
+                    $countries[$counter] = $country->id;
+                }
+            }
+            $poll->countries()->sync($countries);
+        }
+    }
+
+    public static function  updateOptions($poll,$request){
+        $optionsFromRequest = $request->input('options');
+
+        $existingOptions = $poll->options()->get();
+        foreach ($existingOptions as $existingOption) {
+            $existingOption->poll()->dissociate();
+            $existingOption->delete();
+            }
+        for ($counter = 0; $counter < count($optionsFromRequest); $counter++) {
+            $option = new Option(['option' => $optionsFromRequest[$counter]]);
+            $poll->options()->save($option);
+            }
+        }
 }

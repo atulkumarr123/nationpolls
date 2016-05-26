@@ -21,7 +21,6 @@
     <script type="text/javascript"src="/js/jquery-1.12.3.min.js"></script>
     <script type="text/javascript" src="/js/jquery-ui.min.js"></script>
     <script type="text/javascript" src="/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>s
     <script type="text/javascript" src="/js/jquery.timer.js"></script>
     <script type="text/javascript" src="/js/timer.js"></script>
     <script type="text/javascript" src="/js/moment.js"></script>
@@ -39,7 +38,6 @@
 
 </head>
 <body>
-
 @include('_navbar')
 <div class="container">
     <div class="row" id="mainRow">
@@ -49,9 +47,9 @@
         @yield('recentUpdates')
         @yield('createPollForm')
         {{--@yield('aboutUs')--}}
-        {{--@yield('registerUser')--}}
-        {{--@yield('login')--}}
-        {{--@yield('resetPassword')--}}
+        @yield('registerUser')
+        @yield('login')
+        @yield('resetPassword')
         {{--@yield('home')--}}
         {{--@include('ads._adplaceholder')--}}
         {{--@include('miscellaneous._subscribeForm')--}}

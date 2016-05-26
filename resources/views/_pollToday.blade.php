@@ -6,6 +6,9 @@
 <script type="text/javascript" src="/js/barchart.js"></script>
 <script type="text/javascript" src="/js/barchartsupport.js"></script>
 <script type="text/javascript" src="/js/bar.js"></script>
+<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+
+
 <div class="col-md-12" id="main-content-holder">
 {{--        @include("ads._ad1")--}}
         {!! Form::open(['method'=>'patch','files' => true, 'id'=>'updateThePollData','action'=>['NationPollsController@updatePolledData',$poll->id],
@@ -20,7 +23,7 @@
                 <input type="hidden" name="pollDuration" id="pollDuration" value="{{$poll->poll_duration}}"/>
                 <input type="hidden" name="resolvedClientLocation" id="resolvedClientLocation"/>
             @if(session()->has('locationMismatchData'))
-                <input type="text" name="locationMismatchData" id="locationMismatchData" value="{{session('locationMismatchData')}}"/>
+                <input type="hidden" name="locationMismatchData" id="locationMismatchData" value="{{session('locationMismatchData')}}"/>
                     {{session()->forget('locationMismatchData')}}
                 @endif
                 {{csrf_field()}}
@@ -41,6 +44,12 @@
                     <div id="barChart" style="min-width: 300px; height: 400px; margin: 0 auto"></div>
                     </div>
                 <h6 class="title" style="text-align: center;">The opinions are recorded from <b>{{Carbon\Carbon::parse($poll->created_at)->toFormattedDateString()}}</b> to <b>{{Carbon\Carbon::parse($poll->created_at)->addDays($poll->poll_duration)->toFormattedDateString()}}</b></h6>
+                @if(Auth::check())
+                    @if(($userOfThisPoll==Auth::user()&&$poll->isPublishedByAdmin==0)||
+                    (Auth::user()->roles()->lists('role')->contains('admin')))
+                        @include('commons._editAndDelButton')
+                    @endif
+                @endif
                 @include('socialMedia._socialIcons')
                 @include('socialMedia._fbCommentSection')
             </div>

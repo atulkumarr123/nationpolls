@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Poll extends Model
 {
-    protected $fillable = ['title','status','poll_duration','category','img_name','geo_locs_id'];
+    protected $fillable = ['title','status','poll_duration','category','img_name','geo_locs_id','user_id','isPublishedByAdmin','isPublished',];
 
     public function options(){
         return $this->hasMany('App\Option');
@@ -19,8 +19,12 @@ class Poll extends Model
         return $this->belongsTo('App\Category');
     }
 
-    public function countriesPollsApplicableOn()
-    {
-        return $this->hasMany('App\CountriesPollsApplicableOn');
+    public function countries(){
+        return $this->belongsToMany('App\Country','countries_polls_applicable_on');
     }
+
+    public function user(){
+        return $this->belongsTo('App\User');
+    }
+
 }

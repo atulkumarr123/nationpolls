@@ -9,9 +9,9 @@
             </button>
             <div style="display: flex">
             <li><a class="navbar-brand" id="homeBrand" href="/"><i class="fa fa-home fa-2x"></i></a></li>
-                {{--<li class="dropdown userAuthMenuSmallDevices">--}}
-                    {{--@include("commons._userDropDown")--}}
-                {{--</li>--}}
+                <li class="dropdown userAuthMenuSmallDevices">
+                    @include("commons._userDropDown")
+                </li>
                 <li class="searchFormMenuSmallDevices">
                     <form class="navbar-left navbar-search" id="searchForm" action="/search">
                         <div class="" style="padding-top:7px;padding-bottom:7px">
@@ -31,13 +31,12 @@
                 <li><a href="/filter/1">Politics</a></li>
                 <li><a href="/filter/2">Cinema</a></li>
                 <li><a href="/filter/3">Media</a></li>
-                <li><a href="/filter/4">History</a></li>
-                <li><a href="/filter/5">Geography</a></li>
+                <li><a href="/filter/4">Sports</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                {{--<li class="dropdown">--}}
-                {{--@include("commons._userDropDown")--}}
-                {{--</li>--}}
+                <li class="dropdown">
+                @include("commons._userDropDown")
+                </li>
                 <li>
                     <form class="navbar-left navbar-search" id="searchForm" action="/search">
                         <div class="" style="padding-top:7px;padding-bottom:7px">

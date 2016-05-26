@@ -13,7 +13,7 @@
 <div class="form-group">
     {!! Form::label('options', 'Options:') !!}
     <h6  hidden id="validateOptions" style="color: red"> add atleast 2 items</h6>
-    {!! Form::select('options[]', $options, $selectedOptions,['value'=>'{{old(options)}}', 'id'=>'options','class'=>'form-control', 'multiple', 'required']) !!}
+    {!! Form::select('options[]', $options, $selectedOptions,['id'=>'options','class'=>'form-control', 'multiple', 'required']) !!}
 </div>
 <script type="text/javascript">
 

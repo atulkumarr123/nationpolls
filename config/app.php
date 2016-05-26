@@ -157,7 +157,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
-
+        Laravel\Socialite\SocialiteServiceProvider::class,
     ],
 
     /*
@@ -208,6 +208,7 @@ return [
         'Helper'    => App\Helpers\ControllerHelper::class,
         'Flash'     => Laracasts\Flash\Flash::class,
         'GeoIP' => Torann\GeoIP\GeoIPFacade::class,
+        'Socialite' => Laravel\Socialite\Facades\Socialite::class,
     ],
 
 ];

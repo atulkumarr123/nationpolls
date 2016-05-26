@@ -13,7 +13,6 @@ class CreateCountriesPollsApplicableOn extends Migration
     public function up()
     {
         Schema::create('countries_polls_applicable_on', function (Blueprint $table) {
-            $table->increments('id');
             $table->integer('poll_id')->unsigned();
             $table->integer('country_id')->unsigned();
             $table->timestamps();

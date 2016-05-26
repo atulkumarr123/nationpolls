@@ -23,8 +23,7 @@ $(document).ready(function() {
         placeholder: 'Choose a Geo Location',
         minimumResultsForSearch: -1,
     });
-
-
+    showDivAndConstructSelect2();
 });
 function showDivAndConstructSelect2() {
     if ($('#geoloc').val() == '2') {
