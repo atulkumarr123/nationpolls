@@ -16,7 +16,10 @@
     {!! Form::select('options[]', $options, $selectedOptions,['id'=>'options','class'=>'form-control', 'multiple', 'required']) !!}
 </div>
 <script type="text/javascript">
-
+//    $('#options').select2({
+//        placeholder: 'Add/Choose some tags',
+//        options:true
+//    });
 </script>
 
 </div>

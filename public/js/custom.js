@@ -85,3 +85,21 @@ function resolveTheClientLocAndResubmit(myLatlng,countryISOCodesPollsApplicableO
             }
         });
 }
+
+
+function confirmDel(){
+    swal({
+            title: "Are you sure?",
+            text: "You will not be able to recover this poll again!",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Yes, delete it!",
+            cancelButtonText: "No, cancel plz!",
+            closeOnConfirm: true,   closeOnCancel: true },
+        function(isConfirm){   if (isConfirm) {
+            //window.open('/articles/'+$('#articleId').val()+'/delete');
+            window.location = '/polls/'+$('#pollId').val()+'/delete';
+            swal("Deleted!", "Your Poll has been deleted.", "success");   }
+        else {     swal("Cancelled", "Your Poll is safe :)", "error");   } });
+}

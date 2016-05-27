@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Article;
 use App\CountriesPollsApplicableOn;
+use App\Http\Requests\NationPollRequestForUpdate;
 use App\User;
 use App\GeoLocs;
 use App\Http\Requests\Request;
@@ -68,30 +69,35 @@ class NationPollsController extends Controller
     {
         $poll = Poll::findorFail($id);
         $title = $poll->title;
-        $options = Option::lists('option','id');
-        $selectedOptions = $poll->options()->lists('id')->toArray();
+
         $geolocs = [''=>'']+GeoLocs::lists('name','id')->all();
         $selectedGeoLocs = $poll->geo_locs_id;
         $categories = [''=>'']+Category::lists('name','id')->all();
         $selectedCategory = $poll->category;
         $countries = Country::lists('name','id');
         $selectedCountries = $poll->countries()->lists('id')->toArray();
+        $options = Option::lists('option','id');
+        $selectedOptions = $poll->options()->lists('id')->toArray();
+
+//        dd($selectedCountries);
         return view('editContent.editPoll')->
         with(compact('title',
             'selectedOptions','options','poll','categories','selectedCategory',
             'geolocs','selectedGeoLocs','countries','selectedCountries'));
     }
 
-    public function update(NationPollRequest $request, $id)
+    public function update(NationPollRequestForUpdate $request, $id)
     {
         DB::beginTransaction();
         try {
-            $imageName = ControllerHelper::processCoverImage($request);
             $poll = Poll::findorFail($id);
+            if($request->file('image')!=null) {
+                $imageName = ControllerHelper::processCoverImage($request);
+                $poll->img_name = $imageName;
+            }
             $poll->title = $request->get('title');
             $poll->isPublishedByAdmin = ($request->get('isPublishedByAdmin') =='on' ? 1 : 0);
             $poll->isPublished = ($request->get('isPublished') =='on' ? 1 : 0);
-            $poll->img_name = $imageName;
             $poll->category = $request->get('category');
             $poll->geo_locs_id = $request->get('geoloc');
             $poll->poll_duration = $request->get('pollDuration');
@@ -202,7 +208,7 @@ class NationPollsController extends Controller
     {
         $categories = [''=>'']+Category::lists('label','id')->all();
         $selectedCategory = emptyArray();
-        $options = emptyArray();
+        $options  = [''=>'']+Option::lists('option','id')->all();
         $selectedOptions = emptyArray();
         $geolocs = [''=>'']+GeoLocs::lists('name','id')->all();
         $selectedGeoLocs = emptyArray();
@@ -280,6 +286,17 @@ class NationPollsController extends Controller
             $list[$key]['text'] = $value->name;
         }
         return json_encode($list);
+    }
+
+    public function destroy($id)
+    {
+        DB::statement('INSERT INTO polls_hst
+  SELECT *
+  FROM polls WHERE polls.id ='.$id);
+        $poll = Poll::findorFail($id);
+        $poll->delete();
+        Flash::warning('Poll deleted.');
+        return redirect('/home');
     }
 }
 

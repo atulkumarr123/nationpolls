@@ -16,14 +16,36 @@ class PollsControllerForCustomOperations extends NationPollsController
 
     public function filterPollsBasedOnCategory($category)
     {
-        $polls = Poll::where('category', $category)->orderBy('updated_at', 'desc')->get();
+        if(Auth::check()&&Auth::user()->roles()->lists('role')->contains('admin'))
+            $Polls = Poll::where('category', $category)->orderBy('updated_at', 'desc')->get();
+        else if(Auth::check()&&!(Auth::user()->roles()->lists('role')->contains('admin'))){
+            $pollsPublishedByAdminAndDoesntBelongToCurrentUser = Poll::where('isPublishedByAdmin', 1)->
+            where('user_id', '!=',Auth::user()->id)->
+            where('category', $category)->orderBy('updated_at', 'desc')->get();
+            $polls = Auth::user()->Polls()->get();
+            $polls = $polls->merge($pollsPublishedByAdminAndDoesntBelongToCurrentUser);
+        }
+        else
+            $polls = Poll::where('isPublishedByAdmin', 1)->where('category', $category)->orderBy('updated_at', 'desc')->get();
         return view('home')->with(compact('polls'));
     }
 
     public function search(SearchRequest $request)
     {
+        $searchKey = $request->get('search');
+        if(Auth::check()&&Auth::user()->roles()->lists('role')->contains('admin'))
+            $polls = Poll::where('title', 'LIKE', '%'.$searchKey.'%')->orderBy('updated_at', 'desc')->get();
+        else if(Auth::check()&&!(Auth::user()->roles()->lists('role')->contains('admin'))){
+            $pollsPublishedByAdminAndDoesntBelongToCurrentUser = Poll::where('isPublishedByAdmin', 1)->
+            where('title', 'LIKE', '%'.$searchKey.'%')->orderBy('updated_at', 'desc')->get();
+            $polls = Auth::user()->articles()->get();
+            $polls = $polls->merge($pollsPublishedByAdminAndDoesntBelongToCurrentUser);
+        }
+        else
+            $polls = Poll::where('isPublishedByAdmin', 1)->where('title', 'LIKE', '%'.$searchKey.'%')->orderBy('updated_at', 'desc')->get();
+        $queries = DB::getQueryLog();
+        Log::info($queries);
         $search = $request->get('search');
-        $polls = Poll::where('title', 'LIKE', '%'.$search.'%')->orderBy('updated_at', 'desc')->get();
         return view('home')->with(compact('polls','search'));
     }
 

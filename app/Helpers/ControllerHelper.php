@@ -6,6 +6,7 @@ use App\Country;
 use App\GeoLocs;
 use App\Option;
 use App\CountriesPollsApplicableOn;
+use App\OptionsPolls;
 
 class ControllerHelper{
 
@@ -28,11 +29,15 @@ class ControllerHelper{
     }
 
     public static function  saveOptions($poll,$request){
-        $optionsFromRequest = $request->input('options');
+        $optionsFromRequest = $request->get('options');
         for ($counter = 0; $counter < count($optionsFromRequest); $counter++) {
-            $option = Option::create(['option' => $optionsFromRequest[$counter],'poll_id'=>$poll->id]);
-            $option->save();
+            if (!Option::lists('id')->contains($optionsFromRequest[$counter])) {
+                $option = Option::create(['name' => $optionsFromRequest[$counter]]);
+                $option->save();
+                $optionsFromRequest[$counter] = $option->id;
+            }
         }
+        $poll->options()->sync($optionsFromRequest);
     }
 
     public static function  handleAndSaveGeoLocs($poll,$request){
@@ -66,16 +71,14 @@ class ControllerHelper{
     }
 
     public static function  updateOptions($poll,$request){
-        $optionsFromRequest = $request->input('options');
-
-        $existingOptions = $poll->options()->get();
-        foreach ($existingOptions as $existingOption) {
-            $existingOption->poll()->dissociate();
-            $existingOption->delete();
+            $options = $request->get('options');
+            for ($counter = 0; $counter < count($options); $counter++) {
+                if (!Option::lists('id')->contains($options[$counter])) {
+                    $option = Option::create(['option' => $options[$counter]]);
+                    $option->save();
+                    $options[$counter] = $option->id;
+                }
             }
-        for ($counter = 0; $counter < count($optionsFromRequest); $counter++) {
-            $option = new Option(['option' => $optionsFromRequest[$counter]]);
-            $poll->options()->save($option);
-            }
+            $poll->options()->sync($options);
         }
 }

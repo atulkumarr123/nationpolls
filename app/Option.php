@@ -6,9 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Option extends Model
 {
-    protected $fillable = ['option','poll_id'];
+    protected $fillable = ['option'];
 
-    public function poll(){
-        return $this->belongsTo('App\Poll');
+    public function polls(){
+        return $this->belongsToMany('App\Poll','options_polls');
     }
 }

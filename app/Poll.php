@@ -8,9 +8,7 @@ class Poll extends Model
 {
     protected $fillable = ['title','status','poll_duration','category','img_name','geo_locs_id','user_id','isPublishedByAdmin','isPublished',];
 
-    public function options(){
-        return $this->hasMany('App\Option');
-    }
+
     public function polledData(){
         return $this->hasMany('App\PolledData');
     }
@@ -21,6 +19,9 @@ class Poll extends Model
 
     public function countries(){
         return $this->belongsToMany('App\Country','countries_polls_applicable_on');
+    }
+    public function options(){
+        return $this->belongsToMany('App\Option','options_polls');
     }
 
     public function user(){
