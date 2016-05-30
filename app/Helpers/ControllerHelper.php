@@ -7,6 +7,7 @@ use App\GeoLocs;
 use App\Option;
 use App\CountriesPollsApplicableOn;
 use App\OptionsPolls;
+use Illuminate\Support\Collection;
 
 class ControllerHelper{
 
@@ -32,11 +33,12 @@ class ControllerHelper{
         $optionsFromRequest = $request->get('options');
         for ($counter = 0; $counter < count($optionsFromRequest); $counter++) {
             if (!Option::lists('id')->contains($optionsFromRequest[$counter])) {
-                $option = Option::create(['name' => $optionsFromRequest[$counter]]);
+                $option = Option::create(['option' => $optionsFromRequest[$counter]]);
                 $option->save();
                 $optionsFromRequest[$counter] = $option->id;
             }
         }
+//        dd($optionsFromRequest);
         $poll->options()->sync($optionsFromRequest);
     }
 
@@ -51,6 +53,9 @@ class ControllerHelper{
                 $countriesPollsApplicableOn->save();
                 }
             }
+        }
+        else if($geoLoc->name=='Across the world'){
+
         }
     }
 
@@ -81,4 +86,20 @@ class ControllerHelper{
             }
             $poll->options()->sync($options);
         }
+
+    public static function  locationsOfThisPoll($poll,$id)
+    {
+        $geoLoc = GeoLocs::find($poll->geo_locs_id);
+        $locationsPollsApplicableOn = new Collection();
+        if ($geoLoc->name == 'Across The World') {
+            $locationsPollsApplicableOn = 'Across The World';
+        } else if ($geoLoc->name == 'Country') {
+            $countriesPollsApplicableOn = CountriesPollsApplicableOn::where('poll_id', $id)->get()->toArray();
+            for ($counter = 0; $counter < count($countriesPollsApplicableOn); $counter++) {
+                $singleCountryPollDatum = $countriesPollsApplicableOn[$counter];
+                $locationsPollsApplicableOn->push(Country::find($singleCountryPollDatum['country_id'])->name);
+            }
+        }
+        return $locationsPollsApplicableOn;
+    }
 }

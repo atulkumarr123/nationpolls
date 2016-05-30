@@ -51,7 +51,7 @@ class NationPollsController extends Controller
         else if(Auth::check()&&!(Auth::user()->roles()->lists('role')->contains('admin'))){
             $pollsPublishedByAdminAndDoesntBelongToCurrentUser = Poll::where('isPublishedByAdmin', 1)->
             where('user_id', '!=',Auth::user()->id)->orderBy('updated_at', 'desc')->get();
-            $polls = Auth::user()->polls()->get();
+            $polls = Auth::user()->polls()->orderBy('updated_at', 'desc')->get();
             $polls = $polls->merge($pollsPublishedByAdminAndDoesntBelongToCurrentUser);
         }
         else
@@ -62,7 +62,7 @@ class NationPollsController extends Controller
 
     public function show($id)
     {
-        return $this->runningPoll($id);
+        return $this->showRunningPoll($id);
     }
 
     public function edit($id)
@@ -78,12 +78,11 @@ class NationPollsController extends Controller
         $selectedCountries = $poll->countries()->lists('id')->toArray();
         $options = Option::lists('option','id');
         $selectedOptions = $poll->options()->lists('id')->toArray();
-
-//        dd($selectedCountries);
+        $mode = 'edit';
         return view('editContent.editPoll')->
         with(compact('title',
             'selectedOptions','options','poll','categories','selectedCategory',
-            'geolocs','selectedGeoLocs','countries','selectedCountries'));
+            'geolocs','selectedGeoLocs','countries','selectedCountries','mode'));
     }
 
     public function update(NationPollRequestForUpdate $request, $id)
@@ -100,7 +99,7 @@ class NationPollsController extends Controller
             $poll->isPublished = ($request->get('isPublished') =='on' ? 1 : 0);
             $poll->category = $request->get('category');
             $poll->geo_locs_id = $request->get('geoloc');
-            $poll->poll_duration = $request->get('pollDuration');
+            $poll->poll_duration = $request->get('poll_duration');
             ControllerHelper::handleAndSynchGeoLocs($poll,$request);
             ControllerHelper::updateOptions($poll,$request);
             $poll->update();
@@ -121,26 +120,37 @@ class NationPollsController extends Controller
 
     public function updatePolledData(PolledDataRequest $request,$id)
     {
-        $clientMachineIP = $request->ip();
         DB::beginTransaction();
         try {
-            $polledData = PolledData::where('voter_machine_ip', $clientMachineIP)
-                ->where('poll_id',$id)->get()->first();
-            if ($polledData != null) {
-                Flash::warning('oops! looks like you have already cast your vote');
-                return $this->runningPoll($id);
+            if($this->customValidate($request,$id)){
+                $this->saveTheVote($id,$request);
+                DB::commit();
             }
-            $this->validateTheLocationAndUpdatePolledData($request,$id);
-            DB::commit();
-
         }
         catch (\Exception $e) {
             Log::info("error....");
             DB::rollback();
             throw $e;
         }
-            return $this->runningPoll($id);
+            return $this->showRunningPoll($id);
 }
+    public function customValidate($request,$id){
+        if($this->isSameIP($request,$id)){
+            return false;
+        }
+        if($this->validateTheLocationAndUpdatePolledData($request,$id)){
+            return true;
+        }
+    }
+    public function isSameIP($request,$id){
+        $clientMachineIP = $request->ip();
+        $polledData = PolledData::where('voter_machine_ip', $clientMachineIP)
+            ->where('poll_id',$id)->get()->first();
+        if ($polledData != null) {
+            Flash::warning('oops! looks like you have already cast your vote');
+            return true;
+        }
+    }
     public function validateTheLocationAndUpdatePolledData($request,$id){
         $clientMachineIP = $request->ip();
         $clientLocation = GeoIP::getLocation($clientMachineIP);
@@ -152,24 +162,18 @@ class NationPollsController extends Controller
         }
         $poll = Poll::find($id);
         $geoLoc = GeoLocs::find($poll->geo_locs_id);
-        $countriesPollsApplicableOn = emptyArray();
-        $unMatched = true;
-        if($geoLoc->name=='Country'){
+        if($geoLoc->name=='Across The World'){return true;}
+        else if($geoLoc->name=='Country'){
             $countriesPollsApplicableOn = CountriesPollsApplicableOn::where('poll_id', $id)->get()->toArray();
-        }
         for ($counter = 0; $counter < count($countriesPollsApplicableOn); $counter++) {
             $singleCountryPollDatum = $countriesPollsApplicableOn[$counter];
             $country = Country::find($singleCountryPollDatum['country_id']);
             if($clientCountryIsoCode==$country->country_iso_code){
-                $polledData = PolledData::create(['option' => $request->get('option'),
-                    'poll_id' => $id,
-                    'voter_machine_ip' => $request->ip(),]);
-                $polledData->save();
-                $unMatched = false;
-                Flash::success('Thanks for casting your vote');}
+                return true;
+                }
         }
-        if($unMatched){
-            $this->pepareAndReturnTheMsgToHandleMismatchedLocation($request,$countriesPollsApplicableOn);}
+            $this->pepareAndReturnTheMsgToHandleMismatchedLocation($request,$countriesPollsApplicableOn);
+        }
 
     }
     public function pepareAndReturnTheMsgToHandleMismatchedLocation($request,$countriesPollsApplicableOn){
@@ -190,20 +194,30 @@ class NationPollsController extends Controller
         $request->session()->put('locationMismatchData', $locationMismatchData);
         return  redirect()->back();
     }
-    public function runningPoll($id){
+    public function showRunningPoll($id){
         $poll = Poll::find($id);
         $totalPolledData = PolledData::where('poll_id', $poll->id)->get();
         $options = $poll->options()->get();
         $polledData = collect([]);
         if ($totalPolledData->count()!=0) {
             foreach ($options as $option) {
-                $polledDataForOneOption = PolledData::where('option', $option->option)->get();
+                $polledDataForOneOption = PolledData::where('option', $option->option)->where('poll_id', $id)->get();
                 $polledData->put($option->option, ((count($polledDataForOneOption)*100)/(count($totalPolledData))));
             }
         }
         $userOfThisPoll = User::where('id', $poll->user_id)->get()->first();
-        return view('pollToday')->with(compact('poll','options','polledData','userOfThisPoll'));
+        $locationsOfThisPoll = ControllerHelper::locationsOfThisPoll($poll,$id);
+        return view('pollToday')->with(compact('poll','options','polledData','userOfThisPoll','locationsOfThisPoll'));
     }
+
+        public function saveTheVote($id,$request){
+        $polledData = PolledData::create(['option' => $request->get('option'),
+            'poll_id' => $id,
+            'voter_machine_ip' => $request->ip(),]);
+        $polledData->save();
+        Flash::success('Thanks for casting your vote');
+    }
+
     public function create()
     {
         $categories = [''=>'']+Category::lists('label','id')->all();
@@ -214,9 +228,11 @@ class NationPollsController extends Controller
         $selectedGeoLocs = emptyArray();
         $countries = [''=>'']+Country::lists('name','id')->all();
         $selectedCountries = emptyArray();
+        $mode = 'create';
+        $poll = new Poll();
         return view('newPoll')->with(compact('countries','selectedCountries',
             'geolocs','selectedGeoLocs','categories',
-            'selectedCategory','options','selectedOptions'));
+            'selectedCategory','options','selectedOptions','poll','mode'));
     }
 
     public function store(NationPollRequest $request)
@@ -228,7 +244,7 @@ class NationPollsController extends Controller
                 'category' => $request->get('category'),
                 'geo_locs_id' => $request->get('geoloc'),
                 'img_name' => $imageName,
-                'poll_duration' => $request->get('pollDuration'),
+                'poll_duration' => $request->get('poll_duration'),
                 'user_id' => Auth::user()->id
             ]);
             $poll->save();

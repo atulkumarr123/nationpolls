@@ -19,7 +19,7 @@ $(function () {
         xAxis: {
             type: 'category',
             labels: {
-                rotation: -50,
+                rotation: -45,
                 style: {
                     fontSize: '13px',
                     fontFamily: 'Verdana, sans-serif'

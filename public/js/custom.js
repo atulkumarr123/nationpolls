@@ -1,7 +1,9 @@
 $(document).ready(function() {
     $('#alertDiv').not('.alert-important').delay(4000).slideUp(500);
     navbarItemsHighlighter();
-    locationMismatchHandler();
+    if ($('#locationMismatchData').val() != null) {
+        locationMismatchHandler();
+    }
 });
 function navbarItemsHighlighter(){
     $(document).ready(function(){
@@ -15,7 +17,6 @@ function navbarItemsHighlighter(){
 }
 function locationMismatchHandler(){
     $(document).ready(function() {
-                  if ($('#locationMismatchData').val() != null) {
                 var polledData = JSON.parse($('#locationMismatchData').val());
                 var optionToBeSelected = polledData[0].optionToBeSelected;
                 var locationMismatch = polledData[1].locationMismatch;
@@ -33,7 +34,6 @@ function locationMismatchHandler(){
                             getLocation(countryISOCodesPollsApplicableOn);
                         });
                 }
-            }
     });
 }
 function getLocation(countryISOCodesPollsApplicableOn) {
@@ -62,12 +62,14 @@ function resolveTheClientLocAndResubmit(myLatlng,countryISOCodesPollsApplicableO
                                if(country==countryISOCodesPollsApplicableOn[j]){
                                    $("#resolvedClientLocation").val(country);
                                    notMatched = false;
-                                   $("#updateThePollData").submit();
                                }
-                                if(notMatched){
-                                swal({ html:true, title:'You can\'t vote', text:'Your location is not mataching with any of the locaions this poll is runningg on',type:'error'})                            }
                             }
+                            if(notMatched){
+                                swal({ html:true, title:'You can\'t vote', text:'Your location is not mataching with any of the locaions this poll is runningg on',type:'error'})}
+                            else
+                                $("#updateThePollData").submit();
                         }
+
                         //else if (addr.types[0] == 'street_address') // address 1
                         //    address = address + addr.long_name;
                         //else if (addr.types[0] == 'establishment')

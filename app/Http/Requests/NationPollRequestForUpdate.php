@@ -28,7 +28,7 @@ class NationPollRequestForUpdate extends Request
             'title' => 'required|min:7',
             'category'=>'required',
             'options'=>'required',
-            'pollDuration' => 'required|integer|min:0',
+            'poll_duration' => 'required|integer|min:0',
         ];
     }
     public function messages()
@@ -37,7 +37,7 @@ class NationPollRequestForUpdate extends Request
             'title.required' => 'Title is required',
             'category.required' => 'Category is required',
             'options.required' => 'Options are required e.g, YES, NO, MAY BE',
-            'pollDuration.required' => 'Poll Duration is required (i.e, number of days like 8, 50)',
+            'poll_duration.required' => 'Poll Duration is required (i.e, number of days like 8, 50)',
         ];
     }
 }
