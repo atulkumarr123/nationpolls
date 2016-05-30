@@ -29,6 +29,7 @@
     {{--<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/js/select2.min.js"></script>--}}
     <script type="text/javascript" src="/js/sweetalert.min.js"></script>
     <script type="text/javascript" src="/js/socialIcons.js"></script>
+    <script type="text/javascript" src="/js/fingerprint.js"></script>
     {{--<script>--}}
             {{--type="text/javascript"--}}
             {{--src="/js/customJs/searchBar.js">--}}

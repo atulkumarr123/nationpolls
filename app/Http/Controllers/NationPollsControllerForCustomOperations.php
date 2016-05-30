@@ -5,19 +5,19 @@ namespace App\Http\Controllers;
 
 use App\Poll;
 use App\Http\Requests\SearchRequest;
-use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Http\Requests\NationPollRequest;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
-class PollsControllerForCustomOperations extends NationPollsController
+class NationPollsControllerForCustomOperations extends NationPollsController
 {
 
     public function filterPollsBasedOnCategory($category)
     {
         if(Auth::check()&&Auth::user()->roles()->lists('role')->contains('admin'))
-            $Polls = Poll::where('category', $category)->orderBy('updated_at', 'desc')->get();
+            $polls = Poll::where('category', $category)->orderBy('updated_at', 'desc')->get();
         else if(Auth::check()&&!(Auth::user()->roles()->lists('role')->contains('admin'))){
             $pollsPublishedByAdminAndDoesntBelongToCurrentUser = Poll::where('isPublishedByAdmin', 1)->
             where('user_id', '!=',Auth::user()->id)->

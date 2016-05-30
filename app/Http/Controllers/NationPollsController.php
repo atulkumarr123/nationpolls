@@ -11,7 +11,7 @@ use App\Http\Requests\Request;
 use GeoIP;
 use App\ArticleDetail;
 use App\Category;
-use App\Continent;
+use Illuminate\Support\Facades\Auth;
 use App\Subcontinent;
 use App\Country;
 use App\StateProvince;
@@ -25,7 +25,6 @@ use App\Poll;
 use App\PolledData;
 use Illuminate\Support\Collection;
 use Laracasts\Flash\Flash;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Response;
@@ -138,6 +137,9 @@ class NationPollsController extends Controller
         if($this->isSameIP($request,$id)){
             return false;
         }
+        if($this->isSameCanvasFingerPrint($request,$id)){
+            return false;
+        }
         if($this->validateTheLocationAndUpdatePolledData($request,$id)){
             return true;
         }
@@ -145,6 +147,15 @@ class NationPollsController extends Controller
     public function isSameIP($request,$id){
         $clientMachineIP = $request->ip();
         $polledData = PolledData::where('voter_machine_ip', $clientMachineIP)
+            ->where('poll_id',$id)->get()->first();
+        if ($polledData != null) {
+            Flash::warning('oops! looks like you have already cast your vote');
+            return true;
+        }
+    }
+    public function isSameCanvasFingerPrint($request,$id){
+        $fingerPrint = $request->get('fingerPrint');
+        $polledData = PolledData::where('finger_print', $fingerPrint)
             ->where('poll_id',$id)->get()->first();
         if ($polledData != null) {
             Flash::warning('oops! looks like you have already cast your vote');
@@ -211,9 +222,11 @@ class NationPollsController extends Controller
     }
 
         public function saveTheVote($id,$request){
+//            dd( $request->get('fingerPrint'));
         $polledData = PolledData::create(['option' => $request->get('option'),
             'poll_id' => $id,
-            'voter_machine_ip' => $request->ip(),]);
+            'voter_machine_ip' => $request->ip(),
+            'finger_print' => $request->get('fingerPrint'),]);
         $polledData->save();
         Flash::success('Thanks for casting your vote');
     }

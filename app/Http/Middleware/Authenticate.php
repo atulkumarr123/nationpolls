@@ -40,7 +40,6 @@ class Authenticate
         if(!(Auth::check()&&Auth::user()->roles()->lists('role')->contains('admin'))){
             if($mode=='edit'||$mode=='delete'){
                 $poll = Poll::where('id', $request->id)->get()->first();
-//            dd($poll);
                 $user = User::where('id', $poll->user_id)->get()->first();
                 if ($this->auth->guest()||(Auth::user()!=$user)) {
                     if ($request->ajax()) {

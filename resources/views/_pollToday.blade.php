@@ -22,6 +22,7 @@
                 <input type="hidden" name="cresatedAt" id="createdAt" value="{{$poll->created_at}}"/>
                 <input type="hidden" name="pollDuration" id="pollDuration" value="{{$poll->poll_duration}}"/>
                 <input type="hidden" name="resolvedClientLocation" id="resolvedClientLocation"/>
+                <input type="hidden" name="fingerPrint" id="fingerPrint"/>
             @if(session()->has('locationMismatchData'))
                 <input type="hidden" name="locationMismatchData" id="locationMismatchData" value="{{session('locationMismatchData')}}"/>
                     {{session()->forget('locationMismatchData')}}
