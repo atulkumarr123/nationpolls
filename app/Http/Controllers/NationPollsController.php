@@ -218,9 +218,47 @@ class NationPollsController extends Controller
         }
         $userOfThisPoll = User::where('id', $poll->user_id)->get()->first();
         $locationsOfThisPoll = ControllerHelper::locationsOfThisPoll($poll,$id);
-        return view('pollToday')->with(compact('poll','options','polledData','userOfThisPoll','locationsOfThisPoll'));
+        $similarPolls = $this->similarPolls($id);
+        return view('pollToday')->with(compact('poll','options','polledData',
+            'userOfThisPoll','locationsOfThisPoll','similarPolls'));
     }
+    public function similarPolls($id)
+    {
+        $poll = Poll::findorFail($id);
+        $selectedOptions = $poll->options()->lists('option');
+        $numberOfOptionsInCurrentPoll = count($selectedOptions);
+        DB::connection()->enableQueryLog();
+        $similarPolls = array();
+        if (!$selectedOptions->isEmpty()) {
+            $removedBrackets = substr($selectedOptions, 1, -1);
+//            dd($removedBrackets);
+            $numberOfIds = count($selectedOptions);
+            for ($counter = 0; $counter < $numberOfOptionsInCurrentPoll; $counter++) {
 
+                $similarPollsSubSet = DB::select
+                (
+                    'select polls.* from
+            `polls`, options,options_polls where
+            options_polls.poll_id = polls.id and
+            options_polls.option_id = options.id and
+            options.option Not In (select options.option from options where options.option NOT IN (' . $removedBrackets . ')) and
+            polls.id<>' . $id . ' and
+            polls.isPublishedByAdmin=1
+            group by polls.id
+            HAVING count(polls.id)=' . ($numberOfIds) . '');
+                $numberOfIds = $numberOfIds - 1;
+                if (count($similarPollsSubSet) > 0) {
+                    array_push($similarPolls, $similarPollsSubSet);
+                }
+                $queries = DB::getQueryLog();
+                Log::info($queries);
+            }
+        }
+        else{
+            $similarPolls = emptyArray();
+        }
+        return $similarPolls;
+    }
         public function saveTheVote($id,$request){
 //            dd( $request->get('fingerPrint'));
         $polledData = PolledData::create(['option' => $request->get('option'),

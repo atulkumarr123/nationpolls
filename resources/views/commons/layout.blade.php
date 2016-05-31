@@ -47,6 +47,7 @@
         {{--@yield('article')--}}
         @yield('recentUpdates')
         @yield('createPollForm')
+        @yield('similar')
         {{--@yield('aboutUs')--}}
         @yield('registerUser')
         @yield('login')

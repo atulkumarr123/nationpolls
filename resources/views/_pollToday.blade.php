@@ -9,15 +9,15 @@
 <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
 
 
-<div class="col-md-12" id="main-content-holder">
-{{--        @include("ads._ad1")--}}
+<div class="col-md-9" id="main-content-holder">
+
         {!! Form::open(['method'=>'patch','files' => true, 'id'=>'updateThePollData','action'=>['NationPollsController@updatePolledData',$poll->id],
        'enctype'=>'multipart/form-data"',
        'files' => true])!!}
     <div class="row">
             @include("commons._errors")
-            <div class="col-md-2"></div>
-            <div class="col-md-8" id="outerDiv">
+            {{--<div class="col-md-2"></div>--}}
+            {{--<div class="col-md-9" id="outerDiv">--}}
                 <input type="hidden" name="polledData" id="polledData" value="{{$polledData}}"/>
                 <input type="hidden" name="cresatedAt" id="createdAt" value="{{$poll->created_at}}"/>
                 <input type="hidden" name="pollDuration" id="pollDuration" value="{{$poll->poll_duration}}"/>
@@ -29,7 +29,7 @@
                 @endif
                 {{csrf_field()}}
                 <div class="form-group" id="simple_timer"></div>
-                    <div class="form-group">
+                    <div class="form-group" style="margin-left: 40%;">
                             <h3 class="article-title-class">{{ Form::label($poll->title)}}</h3>
                     @foreach ($options as $option)
                                 <input type="radio" class="option" name="option" id="{{$option->option}}" required value="{{$option->option}}" autocomplete="off"/>
@@ -38,7 +38,7 @@
                     @endforeach
                 </div>
                 <div class="form-group">
-                    <button type="submit" class="btn btn-primary"  style="align:center;">Save</button>
+                    <button type="submit" class="btn btn-primary"  style="margin-left: 40%;">Save</button>
                 </div>
                 <br>
                 <div class="form-group">
@@ -53,9 +53,10 @@
                     @endif
                 @endif
                 @include('socialMedia._socialIcons')
+                @include('ads._adForRunningPollView')
                 @include('socialMedia._fbCommentSection')
-            </div>
-            <div class="col-md-2"></div>
+            {{--</div>--}}
+            {{--<div class="col-md-3"> @include("ads._ad1")</div>--}}
         </div>
         {!! Form::close() !!}
         {{--</form>--}}
