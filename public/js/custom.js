@@ -2,7 +2,7 @@ $(document).ready(function() {
     var fingerPrint = new Fingerprint({screen_resolution: true},{canvas: true}).get();
     $("#fingerPrint").val(fingerPrint);
     //var fingerprint = new Fingerprint({canvas: true}).get();
-    $('#alertDiv').not('.alert-important').delay(4000).slideUp(500);
+    $('#alertDiv').not('.alert-important').delay(3000).slideUp(400);
     navbarItemsHighlighter();
     if ($('#locationMismatchData').val() != null) {
         locationMismatchHandler();

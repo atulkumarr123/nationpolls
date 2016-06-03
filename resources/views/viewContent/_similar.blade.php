@@ -3,7 +3,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="similarPosts">
-                <p class="blink_me">Similar Hot Polls</p>
+                <p class="blink_me">Vote for similar Hot Polls</p>
                 &nbsp;&nbsp;&nbsp;<i class="fa fa-hand-o-down fa-2x"></i>
             </div>
         </div>
