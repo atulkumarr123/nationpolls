@@ -8,7 +8,7 @@
                 <span class="icon-bar"></span>
             </button>
             <div style="display: flex">
-            <li><a class="navbar-brand" id="homeBrand" href="/"><i class="fa fa-home fa-2x"></i></a></li>
+                <li class="navbar-brand"><a href="/" style="color: #9d9d9d;"><i class="fa fa-home fa-2x"></i></a></li>
                 <li class="dropdown userAuthMenuSmallDevices">
                     @include("commons._userDropDown")
                 </li>
