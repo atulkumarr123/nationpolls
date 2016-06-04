@@ -52,7 +52,7 @@
                         @include('commons._editAndDelButton')
                     @endif
                 @endif
-                @include('socialMedia._socialIcons')
+        @if($poll->isPublishedByAdmin==1)@include('socialMedia._socialIcons')@endif
                 @include('ads._adForRunningPollView')
                 @include('socialMedia._fbCommentSection')
             {{--</div>--}}
