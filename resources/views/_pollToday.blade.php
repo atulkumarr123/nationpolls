@@ -29,7 +29,7 @@
                 @endif
                 {{csrf_field()}}
                 <div class="form-group" id="simple_timer"></div>
-                    <div class="form-group" style="margin-left: 40%;">
+                    <div class="form-group" style="margin-left: 20%;">
                             <h3 class="article-title-class">{{ Form::label($poll->title)}}</h3>
                     @foreach ($options as $option)
                                 <input type="radio" class="option" name="option" id="{{$option->option}}" required value="{{$option->option}}" autocomplete="off"/>
@@ -38,7 +38,7 @@
                     @endforeach
                 </div>
                 <div class="form-group">
-                    <button type="submit" class="btn btn-primary"  style="margin-left: 40%;">Save</button>
+                    <button type="submit" class="btn btn-primary"  style="margin-left: 20%;">Save</button>
                 </div>
                 <br>
                 <div class="form-group">

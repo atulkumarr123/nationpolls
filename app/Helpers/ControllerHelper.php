@@ -18,6 +18,7 @@ class ControllerHelper{
     }
     public static function removeQuestionMark($string){
         $underScored = str_replace('?', '',$string);
+        $underScored = str_replace('.', '',$underScored);
         return $underScored;
     }
 
@@ -44,7 +45,10 @@ class ControllerHelper{
 
     public static function  handleAndSaveGeoLocs($poll,$request){
         $geoLoc = GeoLocs::find($poll->geo_locs_id);
-        if($geoLoc->name=='Country'){
+        if($geoLoc->name=='Across the world'){
+
+        }
+        else if($geoLoc->name=='Country'){
             $countries = $request->get('countries');
             for ($counter = 0; $counter < count($countries); $counter++) {
                 if($countries[$counter]!=''){
@@ -54,9 +58,7 @@ class ControllerHelper{
                 }
             }
         }
-        else if($geoLoc->name=='Across the world'){
 
-        }
     }
 
 

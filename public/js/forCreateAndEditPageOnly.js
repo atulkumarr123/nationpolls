@@ -25,6 +25,7 @@ $(document).ready(function() {
     });
     showDivAndConstructSelect2();
 });
+
 function showDivAndConstructSelect2() {
     if ($('#geoloc').val() == '2') {
         $('#countryDiv').show();
@@ -49,7 +50,6 @@ function showDivAndConstructSelect2() {
 }
         else{
         $('#countryDiv').hide();
-        $('#countries').val('');
-
+        //$('#countries').val('');
     }
 }
