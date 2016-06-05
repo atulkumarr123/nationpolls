@@ -1,5 +1,4 @@
 <div class="col-md-12" id="main-content-holder">
-
     @foreach ($polls->chunk(3) as $chunk)
         <?php $randomPlaceForAd = rand(1, count($polls)); ?>
         <?php $index = 1; ?>

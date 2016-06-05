@@ -1,4 +1,6 @@
-
+.push {
+    height: 200px; /* '.push' must be the same height as 'footer' */
+}
 #google-ad-1 {
     border-left: 1px solid #f6f6f6;
     border-right: 1px solid #f6f6f6;

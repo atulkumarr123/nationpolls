@@ -22,7 +22,7 @@
         </form>
     </div>
     <script type="text/javascript"
-            src="/js/forCreateAndEditPageOnly.js"></script>
+            src="/js/forCreateAndEditPageOnly.min.js"></script>
 @stop
 
 
