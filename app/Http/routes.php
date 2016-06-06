@@ -18,11 +18,11 @@ Route::get('/home','NationPollsController@index');
 Route::post('polls','NationPollsController@store');
 Route::post('polls/{id}','NationPollsController@update');
 Route::get('search', 'NationPollsControllerForCustomOperations@search');
-Route::patch('/{id}','NationPollsController@updatePolledData');
+Route::patch('/updatePolledData','NationPollsController@updatePolledData');
 Route::get('/filter/{category}', 'NationPollsControllerForCustomOperations@filterPollsBasedOnCategory');
 Route::get('/countries', 'NationPollsController@countries');
 Route::get('polls/create', ['middleware'=>'auth:create', 'uses'=>'NationPollsController@create']);
-Route::get('polls/{id}',['middleware'=>'auth:show', 'uses'=>'NationPollsController@show']);
+Route::get('polls/{title}',['middleware'=>'auth:show', 'uses'=>'NationPollsController@show']);
 Route::get('polls/{id}/edit',['middleware'=>'auth:edit', 'uses'=>'NationPollsController@edit']);
 Route::get('polls/{id}/delete',['middleware'=>'auth:delete', 'uses'=>'NationPollsController@destroy']);
 

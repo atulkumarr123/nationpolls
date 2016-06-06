@@ -22,7 +22,7 @@ class NationPollsControllerForCustomOperations extends NationPollsController
             $pollsPublishedByAdminAndDoesntBelongToCurrentUser = Poll::where('isPublishedByAdmin', 1)->
             where('user_id', '!=',Auth::user()->id)->
             where('category', $category)->orderBy('updated_at', 'desc')->get();
-            $polls = Auth::user()->Polls()->get();
+            $polls = Auth::user()->Polls()->where('category', $category)->orderBy('updated_at', 'desc')->get();
             $polls = $polls->merge($pollsPublishedByAdminAndDoesntBelongToCurrentUser);
         }
         else

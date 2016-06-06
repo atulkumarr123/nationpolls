@@ -59,9 +59,9 @@ class NationPollsController extends Controller
         return view('home')->with('polls', $polls);
     }
 
-    public function show($id)
+    public function show($title)
     {
-        return $this->showRunningPoll($id);
+        return $this->showRunningPollBasedOnTitle($title);
     }
 
     public function edit($id)
@@ -117,12 +117,14 @@ class NationPollsController extends Controller
 
 
 
-    public function updatePolledData(PolledDataRequest $request,$id)
+    public function updatePolledData(PolledDataRequest $request)
     {
+        $title = $request->get('title');
+        $poll = Poll::where('title', $title)->get()->first();
         DB::beginTransaction();
         try {
-            if($this->customValidate($request,$id)){
-                $this->saveTheVote($id,$request);
+            if($this->customValidate($request,$poll->id)){
+                $this->saveTheVote($poll->id,$request);
                 DB::commit();
             }
         }
@@ -131,7 +133,7 @@ class NationPollsController extends Controller
             DB::rollback();
             throw $e;
         }
-            return $this->showRunningPoll($id);
+         return $this->showRunningPollBasedOnTitle($title);
 }
     public function customValidate($request,$id){
         if($this->isSameIP($request,$id)){
@@ -205,23 +207,40 @@ class NationPollsController extends Controller
         $request->session()->put('locationMismatchData', $locationMismatchData);
         return  redirect()->back();
     }
-    public function showRunningPoll($id){
-        $poll = Poll::find($id);
+    public function showRunningPollBasedOnTitle($title){
+        $poll = Poll::where('title', $title)->get()->first();
         $totalPolledData = PolledData::where('poll_id', $poll->id)->get();
         $options = $poll->options()->get();
         $polledData = collect([]);
         if ($totalPolledData->count()!=0) {
             foreach ($options as $option) {
-                $polledDataForOneOption = PolledData::where('option', $option->option)->where('poll_id', $id)->get();
+                $polledDataForOneOption = PolledData::where('option', $option->option)->where('poll_id', $poll->id)->get();
                 $polledData->put($option->option, ((count($polledDataForOneOption)*100)/(count($totalPolledData))));
             }
         }
         $userOfThisPoll = User::where('id', $poll->user_id)->get()->first();
-        $locationsOfThisPoll = ControllerHelper::locationsOfThisPoll($poll,$id);
-        $similarPolls = $this->similarPolls($id);
+        $locationsOfThisPoll = ControllerHelper::locationsOfThisPoll($poll,$poll->id);
+        $similarPolls = $this->similarPolls($poll->id);
         return view('pollToday')->with(compact('poll','options','polledData',
             'userOfThisPoll','locationsOfThisPoll','similarPolls'));
     }
+//    public function showRunningPoll($id){
+//        $poll = Poll::find($id);
+//        $totalPolledData = PolledData::where('poll_id', $poll->id)->get();
+//        $options = $poll->options()->get();
+//        $polledData = collect([]);
+//        if ($totalPolledData->count()!=0) {
+//            foreach ($options as $option) {
+//                $polledDataForOneOption = PolledData::where('option', $option->option)->where('poll_id', $id)->get();
+//                $polledData->put($option->option, ((count($polledDataForOneOption)*100)/(count($totalPolledData))));
+//            }
+//        }
+//        $userOfThisPoll = User::where('id', $poll->user_id)->get()->first();
+//        $locationsOfThisPoll = ControllerHelper::locationsOfThisPoll($poll,$id);
+//        $similarPolls = $this->similarPolls($id);
+//        return view('pollToday')->with(compact('poll','options','polledData',
+//            'userOfThisPoll','locationsOfThisPoll','similarPolls'));
+//    }
     public function similarPolls($id)
     {
         $poll = Poll::findorFail($id);

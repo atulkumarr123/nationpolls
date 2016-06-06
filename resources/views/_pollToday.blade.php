@@ -10,14 +10,14 @@
 
 
 <div class="col-md-9" id="main-content-holder">
-
-        {!! Form::open(['method'=>'patch','files' => true, 'id'=>'updateThePollData','action'=>['NationPollsController@updatePolledData',$poll->id],
+        {!! Form::open(['method'=>'patch','files' => true, 'id'=>'updateThePollData','action'=>['NationPollsController@updatePolledData'],
        'enctype'=>'multipart/form-data"',
        'files' => true])!!}
     <div class="row">
             @include("commons._errors")
             {{--<div class="col-md-2"></div>--}}
             {{--<div class="col-md-9" id="outerDiv">--}}
+                <input type="hidden" name="title" id="title" value="{{$poll->title}}"/>
                 <input type="hidden" name="polledData" id="polledData" value="{{$polledData}}"/>
                 <input type="hidden" name="cresatedAt" id="createdAt" value="{{$poll->created_at}}"/>
                 <input type="hidden" name="pollDuration" id="pollDuration" value="{{$poll->poll_duration}}"/>

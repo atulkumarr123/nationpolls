@@ -25,7 +25,7 @@ class NationPollRequest extends Request
     {
 
         return [
-            'title' => 'required|min:7',
+            'title' => 'required|unique:polls|min:7',
             'category'=>'required',
             'options'=>'required',
             'poll_duration' => 'required|integer|min:0',
