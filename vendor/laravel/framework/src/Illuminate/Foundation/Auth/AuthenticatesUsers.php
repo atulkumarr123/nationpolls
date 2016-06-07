@@ -175,7 +175,7 @@ trait AuthenticatesUsers
     public function logout()
     {
         Auth::guard($this->getGuard())->logout();
-        Flash::info('You are logged out');
+        Flash::info('You have logged out');
         return redirect(property_exists($this, 'redirectAfterLogout') ? $this->redirectAfterLogout : '/');
     }
 

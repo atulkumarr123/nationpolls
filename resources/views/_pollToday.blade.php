@@ -10,9 +10,9 @@
 
 
 <div class="col-md-9" id="main-content-holder">
-        {!! Form::open(['method'=>'patch','files' => true, 'id'=>'updateThePollData','action'=>['NationPollsController@updatePolledData'],
-       'enctype'=>'multipart/form-data"',
-       'files' => true])!!}
+    {!! Form::open(['method'=>'patch','files' => true, 'id'=>'updateThePollData','action'=>['NationPollsController@updatePolledData'],
+   'enctype'=>'multipart/form-data"',
+   'files' => true])!!}
     <div class="row">
             @include("commons._errors")
             {{--<div class="col-md-2"></div>--}}
@@ -45,7 +45,7 @@
                     <div id="barChart" style="min-width: 300px; height: 400px; margin: 0 auto"></div>
                     </div>
                 <h6 class="title" style="text-align: center;">The opinions are recorded from <b>{{Carbon\Carbon::parse($poll->created_at)->toFormattedDateString()}}</b> to <b>{{Carbon\Carbon::parse($poll->created_at)->addDays($poll->poll_duration)->toFormattedDateString()}}</b>
-                In the following locations: <br><b>[{{$locationsOfThisPoll}}]</b></h6>
+                In the following location(s): <br><b>[{{$locationsOfThisPoll}}]</b></h6>
                 @if(Auth::check())
                     @if(($userOfThisPoll==Auth::user()&&$poll->isPublishedByAdmin==0)||
                     (Auth::user()->roles()->lists('role')->contains('admin')))

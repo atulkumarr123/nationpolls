@@ -1,7 +1,7 @@
 @extends('commons.layout')
 
 @section('createPollForm')
-    <div class="col-md-9" id="main-content-holder">
+    <div class="col-md-10" id="main-content-holder">
         {{--        @include("ads._ad1")--}}
         {{--{!! Form::open(['method'=>'patch','files' => true,'action'=>['NationPollsController@update',$poll->id],--}}
         {{--'enctype'=>'multipart/form-data"',--}}
@@ -20,6 +20,9 @@
             </div>
 {{--        {!! Form::close() !!}--}}
         </form>
+    </div>
+    <div class="col-md-2" id="adplaceholderonside">
+        @include("ads.ad")
     </div>
     <script type="text/javascript"
             src="/js/forCreateAndEditPageOnly.min.js"></script>

@@ -1,14 +1,2 @@
-{{--@extends('layout')--}}
+<script type="text/javascript" language="javascript"> var aax_size='160x600'; var aax_pubname = 'nationpolls00-21'; var aax_src='302'; </script><script type="text/javascript" language="javascript" src="http://c.amazon-adsystem.com/aax2/assoc.js"></script>
 
-{{--@section('ad')--}}
-    {{--<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>--}}
-    {{--<!-- Unit 1 -->--}}
-    {{--<ins class="adsbygoogle"--}}
-         {{--style="display:block"--}}
-         {{--data-ad-client="ca-pub-1496015497183087"--}}
-         {{--data-ad-slot="6296028857"--}}
-         {{--data-ad-format="auto"></ins>--}}
-    {{--<script>--}}
-        {{--(adsbygoogle = window.adsbygoogle || []).push({});--}}
-    {{--</script>--}}
-{{--@stop--}}

@@ -24,6 +24,9 @@
                         </div>
                     </form>
                 </li>
+                @if(Auth::check())
+                <li class="userAuthMenuSmallDevices" style="font-size:14px;"><a href="/auth/logout">Log Out <i class="fa fa-sign-out"  ></i></a></li>
+                @endif
             </div>
         </div>
         <div id="navbar" class="navbar-collapse collapse">

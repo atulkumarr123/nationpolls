@@ -1,6 +1,6 @@
 <div class="col-md-12" id="main-content-holder">
-    @foreach ($polls->chunk(3) as $chunk)
-        <?php $randomPlaceForAd = rand(1, count($polls)); ?>
+    @foreach ($polls->chunk(2) as $chunk)
+        <?php $randomPlaceForAd = rand(1, 2); ?>
         <?php $index = 1; ?>
         <div class="row">
             @foreach ($chunk as $poll)
