@@ -61,6 +61,7 @@ class NationPollsController extends Controller
 
     public function show($title)
     {
+        $title = ControllerHelper::deProcessTheDirName($title);
         return $this->showRunningPollBasedOnTitle($title);
     }
 

@@ -11,14 +11,31 @@ use Illuminate\Support\Collection;
 
 class ControllerHelper{
 
-    public static function underScoreIt($string){
-        $underScored = str_replace(' ', '_',$string);
-        $underScored = ControllerHelper::removeQuestionMark($underScored);
-        $underScored = ControllerHelper::removeDots($underScored);
-        return $underScored;
+    public static function deUnderScoreIt($string){
+        $deHyphenized = str_replace('_', ' ',$string);
+        return $deHyphenized;
     }
-    public static function removeQuestionMark($string){
-        $underScored = str_replace('?', '',$string);
+    public static function replaceTiltSymbolWIthQsnMarkIt($string){
+        $deHyphenized = str_replace('~', '?',$string);
+        return $deHyphenized;
+    }
+    public static function deProcessTheDirName($string){
+        $directoryName = ControllerHelper::deUnderScoreIt($string);
+        $directoryName = ControllerHelper::replaceTiltSymbolWIthQsnMarkIt($directoryName);
+        return $directoryName;
+    }
+    public static function processTheDirName($string){
+        $directoryName = ControllerHelper::underScoreIt($string);
+        $directoryName = ControllerHelper::replaceQuestionMark($directoryName);
+        return $directoryName;
+    }
+
+    public static function underScoreIt($string){
+        $hyphenizedd = str_replace(' ', '_',$string);
+        return $hyphenizedd;
+    }
+    public static function replaceQuestionMark($string){
+        $underScored = str_replace('?', '~',$string);
         return $underScored;
     }
     public static function removeDots($string){
@@ -26,11 +43,13 @@ class ControllerHelper{
         return $underScored;
     }
     public static function  processCoverImage($request){
-            $underScoredTitle = ControllerHelper::underScoreIt($request->get('title'));
-            $underScoredImageName = $underScoredTitle.'.'.$request->file('image')->getClientOriginalExtension();
+            $directoryName = ControllerHelper::processTheDirName($request->get('title'));
+            $imageName = ControllerHelper::removeDots($directoryName);
+
+            $imageName = $imageName.'.'.$request->file('image')->getClientOriginalExtension();
             $request->file('image')->move(
-                base_path().'/public/images/'.$underScoredTitle, $underScoredImageName);
-        return $underScoredImageName;
+                base_path().'/public/images/'.$directoryName, $imageName);
+        return $imageName;
     }
 
     public static function  saveOptions($poll,$request){
