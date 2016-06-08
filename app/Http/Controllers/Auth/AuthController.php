@@ -90,14 +90,16 @@ class AuthController extends Controller
      */
     public function handleProviderCallback($provider)
     {
+
         try {
             $userFromSocialMedia = Socialite::driver($provider)->user();
         } catch (Exception $e) {
             return redirect('auth/'.$provider);
         }
-
+        if($this->isSameMailIdButDifferentSocialId($userFromSocialMedia,$provider)){
+            return view('auth.login');
+        }
         $authUser = $this->findOrCreateUser($userFromSocialMedia);
-
         Auth::login($authUser, true);
         Flash::success('You are logged in');
         return redirect()->intended($this->redirectPath());
@@ -123,5 +125,22 @@ class AuthController extends Controller
             'social_id' => $userFromSocialMedia->id,
             'avatar' => $userFromSocialMedia->avatar
         ]);
+    }
+
+    private function isSameMailIdButDifferentSocialId($userFromSocialMedia,$provider)
+    {
+        $authUser = User::where('social_id', $userFromSocialMedia->id)->first();
+        if($authUser==null){
+            $my_user = User::where('email','=', $userFromSocialMedia->getEmail())->first();
+            if($my_user!=null){
+                if($provider=='google'){
+                    Flash::warning('oops! looks like you have already used this email while logging in via Facebook');
+                }
+                else{
+                    Flash::warning('oops! looks like you have already used this email while logging in via Google');
+                }
+                return  true;
+            }
+        }
     }
 }
