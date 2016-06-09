@@ -209,7 +209,8 @@ class NationPollsController extends Controller
         return  redirect()->back();
     }
     public function showRunningPollBasedOnTitle($title){
-        $poll = Poll::where('title', $title)->get()->first();
+        $poll = $this->getThePollForThisTitle($title);
+        if($poll==null){return redirect('/');}
         $totalPolledData = PolledData::where('poll_id', $poll->id)->get();
         $options = $poll->options()->get();
         $polledData = collect([]);
@@ -224,6 +225,26 @@ class NationPollsController extends Controller
         $similarPolls = $this->similarPolls($poll->id);
         return view('pollToday')->with(compact('poll','options','polledData',
             'userOfThisPoll','locationsOfThisPoll','similarPolls'));
+    }
+    public function getThePollForThisTitle($title)
+    {
+        if(Auth::check()&&Auth::user()->roles()->lists('role')->contains('admin')) {
+            $poll = Poll::where('title', $title)->get()->first();
+        }
+        else if(Auth::check()&&!(Auth::user()->roles()->lists('role')->contains('admin'))){
+            $poll = Poll::where('title', $title)->
+            where('user_id', Auth::user()->id)
+                ->get()->first();
+        }
+        else{
+            $poll = Poll::where('title', $title)->
+            where('isPublishedByAdmin', 1)
+                ->get()->first();
+        }
+        if($poll==null){
+            Flash::warning('oops! No such poll is running.');
+        }
+        return $poll;
     }
 //    public function showRunningPoll($id){
 //        $poll = Poll::find($id);
