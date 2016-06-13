@@ -3,11 +3,20 @@ $(document).ready(function() {
     $("#fingerPrint").val(fingerPrint);
     //var fingerprint = new Fingerprint({canvas: true}).get();
     $('#alertDiv').not('.alert-important').delay(3000).slideUp(400);
+    isPollingClosed();
     navbarItemsHighlighter();
     if ($('#locationMismatchData').val() != null) {
         locationMismatchHandler();
     }
 });
+function isPollingClosed(){
+    if($('#status').val()=='closed'){
+        $(".option").attr("disabled", true);
+        $(".timer-head-block").attr("hidden", true);
+        $(".btn").hide();
+        $('.timer-body-block').html('<p style="font-size: 1.2em;">Polling is closed!</p>');
+    }
+}
 function navbarItemsHighlighter(){
     $(document).ready(function(){
         if(this.location.pathname=='/'){

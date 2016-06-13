@@ -95,6 +95,7 @@ class NationPollsController extends Controller
                 $poll->img_name = $imageName;
             }
             $poll->title = $request->get('title');
+            $poll->status = 'open';
             $poll->isPublishedByAdmin = ($request->get('isPublishedByAdmin') =='on' ? 1 : 0);
             $poll->isPublished = ($request->get('isPublished') =='on' ? 1 : 0);
             $poll->category = $request->get('category');
@@ -334,6 +335,7 @@ class NationPollsController extends Controller
             $imageName = ControllerHelper::processCoverImage($request);
             $poll = Poll::create(['title' => $request->get('title'),
                 'category' => $request->get('category'),
+                'status' => 'open',
                 'geo_locs_id' => $request->get('geoloc'),
                 'img_name' => $imageName,
                 'poll_duration' => $request->get('poll_duration'),

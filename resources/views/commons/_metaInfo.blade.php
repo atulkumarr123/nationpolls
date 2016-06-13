@@ -6,7 +6,7 @@
 <meta property="og:title"         content="@yield('title')"/>
 <meta property="og:description"   content="@yield('description')"/>
 <meta property="og:site_name"     content="NationPolls"/>
-<meta property="fb:app_id"        content="572820202894280"/>
+<meta property="fb:app_id"        content="1725632877652573"/>
 
 {{--Twitter--}}
 <meta property="twitter:url"           content="@yield('url')" />

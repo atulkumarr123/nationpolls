@@ -19,7 +19,8 @@
             {{--<div class="col-md-9" id="outerDiv">--}}
                 <input type="hidden" name="title" id="title" value="{{$poll->title}}"/>
                 <input type="hidden" name="polledData" id="polledData" value="{{$polledData}}"/>
-                <input type="hidden" name="cresatedAt" id="createdAt" value="{{$poll->created_at}}"/>
+                <input type="hidden" name="createdAt" id="createdAt" value="{{$poll->created_at}}"/>
+                <input type="hidden" name="status" id="status" value="{{$poll->status}}"/>
                 <input type="hidden" name="pollDuration" id="pollDuration" value="{{$poll->poll_duration}}"/>
                 <input type="hidden" name="resolvedClientLocation" id="resolvedClientLocation"/>
                 <input type="hidden" name="fingerPrint" id="fingerPrint"/>
