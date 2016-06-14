@@ -25,6 +25,7 @@
     <script type="text/javascript" src="/js/nationpolls.js"></script>
 </head>
 <body>
+@include('analyticstracking._analyticstracking')
 @include('_navbar')
 <div class="container">
     <div class="row" id="mainRow">

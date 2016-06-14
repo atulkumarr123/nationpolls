@@ -135,7 +135,8 @@ class NationPollsController extends Controller
             DB::rollback();
             throw $e;
         }
-         return $this->showRunningPollBasedOnTitle($title);
+        return redirect('polls/'.$title);
+//         return $this->showRunningPollBasedOnTitle($title);
 }
     public function customValidate($request,$id){
         if($this->isSameIP($request,$id)){
