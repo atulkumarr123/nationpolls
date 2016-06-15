@@ -121,7 +121,7 @@ class NationPollsController extends Controller
 
     public function updatePolledData(PolledDataRequest $request)
     {
-        $title = $request->get('title');
+        $title = ControllerHelper::deProcessTheDirName($request->get('title'));
         $poll = Poll::where('title', $title)->get()->first();
         DB::beginTransaction();
         try {
@@ -135,6 +135,7 @@ class NationPollsController extends Controller
             DB::rollback();
             throw $e;
         }
+        $title = ControllerHelper::processTheDirName($title);
         return redirect('polls/'.$title);
 //         return $this->showRunningPollBasedOnTitle($title);
 }

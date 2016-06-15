@@ -50,7 +50,7 @@ class Authenticate
                 }
             }
             else if($mode=='show'){
-                $poll = Poll::where('id', $request->id)->get()->first();
+                $poll = Poll::where('title', $request->title)->get()->first();
                 if(Auth::check()&&$poll!=null){
                     if (!$poll->isPublishedByAdmin&&$poll->user_id!=Auth::user()->id) {
                         if ($request->ajax()) {

@@ -14,7 +14,6 @@
 Route::get('/','NationPollsController@index');
 Route::get('/home','NationPollsController@index');
 //Route::get('polls/onlyatulcancreate', 'NationNationPollsController@create');
-//Route::get('polls/{id}','NationNationPollsController@show');
 Route::post('polls','NationPollsController@store');
 Route::post('polls/{id}','NationPollsController@update');
 Route::get('search', 'NationPollsControllerForCustomOperations@search');
