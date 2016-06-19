@@ -8,26 +8,23 @@
             </div>
         </div>
     </div>
-    @foreach ($similarPolls as $pollSet)
-        <?php $randomPlaceForAd = rand(1, count($pollSet)); ?>
+    @foreach ($similarPolls as $onePoll)
+        <?php $randomPlaceForAd = rand(1, count($similarPolls)); ?>
             <?php $index = 1; ?>
-        @foreach ($pollSet as $onePoll)
         <div class="row">
             <div class="col-md-12 article-design-on-article-page">
-                <a href="{{url("/polls",$onePoll->id)}}" class="recent-updates-block-anchor">
-                <article class="media">
+                <a href="{{url("/polls",Helper::processTheDirName($onePoll->title))}}" class="recent-updates-block-anchor">
+                    <article class="media">
                     <h4 class="article-title-class">{{$onePoll->title}}</h4>
-                    <h6 class="pull-right" style="margin:0px">{{Carbon\Carbon::parse($onePoll->updated_at)->toFormattedDateString().' By '}}<span style="font-weight: 600;">{{$poll->user->name}}</span></h6>
-                    <img class="media-object_forRelatedArticles" src="@include("commons._coverImagePath")">
+                    <h6 class="pull-right" style="margin:0px">{{Carbon\Carbon::parse($onePoll->updated_at)->toFormattedDateString().' By '}}<span style="font-weight: 600;">{{$onePoll->user->name}}</span></h6>
+                    <img class="media-object_forRelatedArticles" src="@include("commons._coverImagePath",  array("poll" => $onePoll))">
                 </article>
                 </a>
             </div>
-
         </div>
         @if($index===$randomPlaceForAd)
             @include("ads._adForSimilarArticles")
             @endif
                 <?php $index=$index+1; ?>
-            @endforeach
     @endforeach
 </div>

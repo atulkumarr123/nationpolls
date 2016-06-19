@@ -225,7 +225,9 @@
 .social-icons .fa-xing,.social-icons .fa-xing-square{background-color:#00555C;}
 .social-icons .fa-youtube,.social-icons .fa-youtube-play,.social-icons .fa-youtube-square{background-color:#aeb5c5;}
 
-
+.fb-page, .fb-page iframe[style], .fb-page span {
+    width: 100% !important;
+}
 
 
 

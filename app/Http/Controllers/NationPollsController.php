@@ -301,7 +301,17 @@ class NationPollsController extends Controller
         else{
             $similarPolls = emptyArray();
         }
-        return $similarPolls;
+        return $this->getPollsInTheFormOfObjects($similarPolls); //since QueryBuilder doesn't give nested objects it means they don't give objects eagerly loaded which we will require on view(blade)
+    }
+    public function getPollsInTheFormOfObjects($similarPolls){
+        $similarPollsObjects = array();
+        if($similarPolls!=null){
+        foreach ($similarPolls[0] as $similarPoll)
+        {
+            $pollObject = $this->getThePollForThisTitle($similarPoll->title);
+            array_push($similarPollsObjects, $pollObject);
+        }}
+        return $similarPollsObjects;
     }
         public function saveTheVote($id,$request){
 //            dd( $request->get('fingerPrint'));
