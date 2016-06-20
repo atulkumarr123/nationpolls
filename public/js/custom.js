@@ -28,13 +28,16 @@ function navbarItemsHighlighter(){
     });
 }
 function locationMismatchHandler(){
-    $(document).ready(function() {
                 var polledData = JSON.parse($('#locationMismatchData').val());
                 var optionToBeSelected = polledData[0].optionToBeSelected;
                 var locationMismatch = polledData[1].locationMismatch;
                 var countriesPollsApplicableOn = polledData[2].countriesPollsApplicableOn;
                 var countryISOCodesPollsApplicableOn = polledData[3].countryISOCodesPollsApplicableOn;
-                $('#' + optionToBeSelected).prop("checked", true);
+                $('input:radio').each(function() {
+                    if($(this).val()==optionToBeSelected) {
+                        $(this).prop("checked", true);
+                    }
+                });
                 if (locationMismatch == 'unMatched') {
                     var title = 'This Poll is running only in the following location(s):';
                     swal({
@@ -46,7 +49,6 @@ function locationMismatchHandler(){
                             getLocation(countryISOCodesPollsApplicableOn);
                         });
                 }
-    });
 }
 function getLocation(countryISOCodesPollsApplicableOn) {
     navigator.geolocation.getCurrentPosition(function(position) {
@@ -99,7 +101,6 @@ function resolveTheClientLocAndResubmit(myLatlng,countryISOCodesPollsApplicableO
             }
         });
 }
-
 
 function confirmDel(){
     swal({
