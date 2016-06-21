@@ -1,6 +1,7 @@
-<script type="text/javascript" src="/js/barchart.js"></script>
-<script type="text/javascript" src="/js/barchartsupport.js"></script>
-<script type="text/javascript" src="/js/bar.js"></script>
+{{--<script type="text/javascript" src="/js/barchart.js"></script>--}}
+{{--<script type="text/javascript" src="/js/barchartsupport.js"></script>--}}
+{{--<script type="text/javascript" src="/js/bar.js"></script>--}}
+<script type="text/javascript" src="/js/bar.min.js"></script>
 <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
 
 
