@@ -1,5 +1,5 @@
 @extends('commons.layout')
-
+@include("commons._metaDetails")
 @section('createPollForm')
     <div class="col-md-10" id="main-content-holder">
 {{--        @include("ads._ad1")--}}

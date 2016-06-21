@@ -1,4 +1,5 @@
 @extends('commons.layout')
+@include("commons._metaDetails")
 @section('pollToday')
     @include("_pollToday")
 @stop

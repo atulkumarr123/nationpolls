@@ -1,8 +1,3 @@
-@section('image'){{url('/')}}@include("commons._coverImagePath")@stop
-@section('url'){{Request::url()}}@stop
-@section('title'){{$poll->title}}@stop
-@section('description'){{$poll->title}}@stop
-
 <script type="text/javascript" src="/js/barchart.js"></script>
 <script type="text/javascript" src="/js/barchartsupport.js"></script>
 <script type="text/javascript" src="/js/bar.js"></script>

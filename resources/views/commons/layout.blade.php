@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
     @include("commons._metaInfo")
-    <title>Nation Polls</title>
     {{--<link rel="stylesheet" href="/css/app.css">--}}
     {{--<link rel="stylesheet" href="/css/font-awesome.css">--}}
     {{--<link rel="stylesheet" href="/css/select2.min.css">--}}
