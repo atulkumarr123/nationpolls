@@ -35,7 +35,7 @@
                     @endforeach
                 </div>
                 <div class="form-group">
-                    <button type="submit" class="btn btn-primary"  style="margin-left: 20%;">Save</button>
+                    <button type="submit" class="btn btn-primary"  style="margin-left: 20%;">Vote</button>
                 </div>
                 <br>
                 <div class="form-group">

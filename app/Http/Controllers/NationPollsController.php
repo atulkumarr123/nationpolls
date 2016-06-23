@@ -226,8 +226,9 @@ class NationPollsController extends Controller
         $userOfThisPoll = User::where('id', $poll->user_id)->get()->first();
         $locationsOfThisPoll = ControllerHelper::locationsOfThisPoll($poll,$poll->id);
         $similarPolls = $this->similarPolls($poll->id);
+        $numberOfUniqueVotes = count($totalPolledData);
         return view('pollToday')->with(compact('poll','options','polledData',
-            'userOfThisPoll','locationsOfThisPoll','similarPolls'));
+            'userOfThisPoll','locationsOfThisPoll','similarPolls','numberOfUniqueVotes'));
     }
     public function getThePollForThisTitle($title)
     {

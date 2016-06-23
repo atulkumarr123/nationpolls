@@ -5,7 +5,7 @@
 <META name="keywords" content="polling,voting,country,world,elections,public,choice,opinions,polls,social-issues,media,news,democracy,republican,people-choice,politics,politicians,celebrities,votes,cast-your-votes">
 <meta name="robots" content="index, follow">
 <meta name="content-language" content="en">
-<meta name="author" content="Atul Kumar">
+<meta name="author" content="Nation Polls">
 <meta name="copyright" content="Nation Polls">
 <meta name="revisit-after" content="15 days">
 {{--Facebook--}}

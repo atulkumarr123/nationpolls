@@ -1,1 +1,1 @@
-<title>Nation Polls is all about your opinions</title>
+Nation Polls is all about your opinions
