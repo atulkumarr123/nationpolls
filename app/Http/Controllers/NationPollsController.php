@@ -232,16 +232,24 @@ class NationPollsController extends Controller
     }
     public function getThePollForThisTitle($title)
     {
+        DB::connection()->enableQueryLog();
         if(Auth::check()&&Auth::user()->roles()->lists('role')->contains('admin')) {
-            $poll = Poll::where('title', $title)->get()->first();
+            $poll = Poll::where('title', 'LIKE', $title)->get()->first();
         }
         else if(Auth::check()&&!(Auth::user()->roles()->lists('role')->contains('admin'))){
-            $poll = Poll::where('title', $title)->
+            $poll = Poll::where('title', 'LIKE', $title)->
             where('user_id', Auth::user()->id)
+                ->orWhere(function($query) use ($title)
+                {
+                    $query->where('isPublishedByAdmin', '=', 1)
+                        ->where('title', 'LIKE', $title);
+                })
                 ->get()->first();
+            $queries = DB::getQueryLog();
+            Log::info($queries);
         }
         else{
-            $poll = Poll::where('title', $title)->
+            $poll = Poll::where('title', 'LIKE', $title)->
             where('isPublishedByAdmin', 1)
                 ->get()->first();
         }
